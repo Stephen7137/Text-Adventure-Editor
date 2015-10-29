@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="395.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cpp.TextAdvEditor.View.OptionPane">
+   <children>
+      <Text fx:id="option" layoutY="-0.05078125" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="87.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <TextArea fx:id="optionText" layoutY="16.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="55.0" prefWidth="395.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="16.0" />
+   </children>
+</AnchorPane>
