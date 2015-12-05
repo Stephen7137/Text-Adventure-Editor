@@ -1,19 +1,51 @@
 package cpp.TextAdvEditor.Model;
 
-public class Text extends Node {
+import java.util.ArrayList;
 
-	private Node childNode;
-	
-	public Text(String title, String text, int nodeNum) {
-		super(title,text, nodeNum, 0);
-	}
+public class Text {
 
-	public void setChildNode(Node childNode){
-		this.childNode=childNode;
+	private String title;
+	private String text;
+	private ArrayList<Text> parent;
+	private ArrayList<Text> child;
+	
+	public void setTitle(String title){
+		this.title = title;
 	}
 	
-	@Override
-	public Node getNextNode(int i) {
-		return childNode;
+	public String getTitle(){
+		return title;
+	}
+	
+	public void setText(String text){
+		this.text = text;
+	}
+	
+	public String getText(){
+		return text;
+	}
+	
+	public void setParent(ArrayList<Text> parent){
+		this.parent = parent;
+	}
+	
+	public ArrayList<Text> getParent(){
+		return parent;
+	}
+	
+	public void setChild(ArrayList<Text> child){
+		this.child = child;
+	}
+	
+	public ArrayList<Text> getChild(){
+		return child;
+	}
+	
+	public Text getChild(int i){
+		return child.get(i);
+	}
+	
+	public int getChildSize(){
+		return child.size();
 	}
 }

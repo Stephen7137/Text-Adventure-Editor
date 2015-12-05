@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.canvas.*?>
 <?import javafx.scene.text.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
@@ -10,126 +11,7 @@
 
 <AnchorPane id="AnchorPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cpp.TextAdvEditor.View.TextAdvEditorControler">
   <children>
-    <TabPane fx:id="tab" prefHeight="576.0" prefWidth="800.0" rotateGraphic="false" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="24.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="24.0">
-      <tabs>
-        <Tab text="Over View">
-          <content>
-            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="169.0" prefWidth="286.0">
-              <children>
-            <TextArea fx:id="story" editable="false" prefHeight="517.0" prefWidth="396.0" wrapText="true" AnchorPane.bottomAnchor="26.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-            <GridPane prefHeight="24.0" prefWidth="396.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-              <children>
-                <Button fx:id="enter0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefWidth="70.0" text="Enter" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                <TextField fx:id="input0" alignment="CENTER" prefHeight="21.0" prefWidth="347.0" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-              </children>
-              <columnConstraints>
-                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="742.0" minWidth="-Infinity" prefWidth="720.0" />
-                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="113.0" minWidth="-Infinity" prefWidth="70.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-            </GridPane>
-              </children>
-            </AnchorPane>
-          </content>
-        </Tab>
-        <Tab text="Story Tree">
-          <content>
-            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" opacity="1.0" prefHeight="169.0" prefWidth="476.0">
-              <children>
-                <ImageView fitHeight="521.0" fitWidth="795.4198473282444" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="4.58" AnchorPane.topAnchor="24.0" />
-                <GridPane prefHeight="24.0" prefWidth="636.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
-                  <children>
-                    <Button fx:id="setParent" minWidth="-Infinity" mnemonicParsing="false" prefWidth="106.0" text="Select as Parent" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER" />
-                    <Button fx:id="setChild" minWidth="-Infinity" mnemonicParsing="false" prefWidth="106.0" text="Select as Child" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                    <Button fx:id="connect0" minWidth="-Infinity" mnemonicParsing="false" prefWidth="106.0" text="Connect" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="0" />
-                    <Button fx:id="disconnect" minWidth="-Infinity" mnemonicParsing="false" prefWidth="106.0" text="Disconnect" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="0" />
-                    <Button fx:id="delete" minWidth="-Infinity" mnemonicParsing="false" prefWidth="106.0" text="Delete" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="0" />
-                    <Button fx:id="newNode0" minWidth="-Infinity" mnemonicParsing="false" prefWidth="106.0" text="New Node" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="0" />
-                  </children>
-                  <columnConstraints>
-                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="-1.0" minWidth="-Infinity" prefWidth="106.0" />
-                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="-1.0" minWidth="-Infinity" prefWidth="106.0" />
-                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="-1.0" minWidth="-Infinity" prefWidth="106.0" />
-                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="-1.0" minWidth="-Infinity" prefWidth="106.0" />
-                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="-1.0" minWidth="-Infinity" prefWidth="106.0" />
-                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="-1.0" minWidth="-Infinity" percentWidth="-1.0" prefWidth="106.0" />
-                  </columnConstraints>
-                  <rowConstraints>
-                    <RowConstraints maxHeight="66.0" minHeight="10.0" prefHeight="49.0" vgrow="SOMETIMES" />
-                  </rowConstraints>
-                </GridPane>
-              </children>
-            </AnchorPane>
-          </content>
-        </Tab>
-        <Tab text="Selected Nodes">
-          <content>
-            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="394.0" prefWidth="600.0">
-              <children>
-                <SplitPane dividerPositions="0.4990791896869245" focusTraversable="true" orientation="VERTICAL" prefHeight="545.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="0.0">
-                  <items>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
-                      <children>
-                        <TextArea fx:id="parentNode" editable="false" prefHeight="244.0" prefWidth="798.0" wrapText="true" AnchorPane.bottomAnchor="24.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                        <GridPane prefHeight="24.0" AnchorPane.bottomAnchor="1.0" AnchorPane.rightAnchor="0.0">
-                          <children>
-                            <Button minWidth="-Infinity" mnemonicParsing="false" onAction="#next" prefWidth="109.0" text="Enter" />
-                            <Button mnemonicParsing="false" onAction="#connect" prefWidth="109.0" text="Connect" GridPane.columnIndex="1" />
-                            <Button fx:id="saveParent" minWidth="-Infinity" mnemonicParsing="false" prefWidth="109.0" text="Edit" GridPane.columnIndex="3" GridPane.rowIndex="0" />
-                            <Button minWidth="-Infinity" mnemonicParsing="false" onAction="#deleteParent" prefWidth="109.0" text="Delete" GridPane.columnIndex="4" GridPane.rowIndex="0" />
-                                          <Button mnemonicParsing="false" onAction="#disconnect" prefWidth="109.0" text="Disconnect" GridPane.columnIndex="2" />
-                          </children>
-                          <columnConstraints>
-                                          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="109.0" />
-                            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="-Infinity" prefWidth="105.0" />
-                            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="-Infinity" prefWidth="105.0" />
-                            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="-Infinity" prefWidth="109.0" />
-                            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="-Infinity" prefWidth="109.0" />
-                          </columnConstraints>
-                          <rowConstraints>
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                          </rowConstraints>
-                        </GridPane>
-                        <TextField fx:id="input1" alignment="CENTER" layoutX="82.0" layoutY="244.0" prefHeight="25.0" prefWidth="170.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="537.0" />
-                                    <Text layoutX="14.0" layoutY="261.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Parent Node" />
-                      </children>
-                    </AnchorPane>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
-                      <children>
-                        <TextArea fx:id="childNode" editable="false" prefHeight="244.0" prefWidth="800.0" wrapText="true" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-2.0" AnchorPane.topAnchor="0.0" />
-                        <GridPane prefHeight="24.0" AnchorPane.bottomAnchor="1.0" AnchorPane.rightAnchor="0.0">
-                          <children>
-                            <Button fx:id="saveChild" minWidth="-Infinity" mnemonicParsing="false" prefWidth="109.0" text="Edit" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                            <Button minWidth="-Infinity" mnemonicParsing="false" onAction="#deleteChild" prefWidth="109.0" text="Delete" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                            <Button minWidth="-Infinity" mnemonicParsing="false" onAction="#newNode" prefWidth="109.0" text="New Node" GridPane.columnIndex="2" GridPane.rowIndex="0" />
-                          </children>
-                          <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="-Infinity" prefWidth="109.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="-Infinity" prefWidth="109.0" />
-                            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="-Infinity" prefWidth="109.0" />
-                          </columnConstraints>
-                          <rowConstraints>
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                          </rowConstraints>
-                        </GridPane>
-                                    <Text layoutX="14.0" layoutY="262.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Child Node" />
-                      </children>
-                    </AnchorPane>
-                  </items>
-                </SplitPane>
-              </children>
-            </AnchorPane>
-          </content>
-        </Tab>
-            <Tab text="Scene">
-              <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-              </content>
-            </Tab>
-      </tabs>
-    </TabPane>
+    <TabPane fx:id="tabPane" prefHeight="576.0" prefWidth="800.0" rotateGraphic="false" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="24.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="24.0" />
     <MenuBar prefWidth="800.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <menus>
         <Menu mnemonicParsing="false" text="File">

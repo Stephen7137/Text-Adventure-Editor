@@ -2,28 +2,28 @@ package cpp.TextAdvEditor.Model;
 
 import java.util.ArrayList;
 
-public class Chapter {
+public class Story {
 
-	private String chName;
-	private ArrayList<Text> tree;
+	private String strName;
+	private ArrayList<Text> chapter;
 	
 	public void setCHName(String chName){
-		this.chName = chName;
+		this.strName = chName;
 	}
 	
 	public String getCHName(){
-		return chName;
+		return strName;
 	}
 	
 	public void setTree(ArrayList<Text> newTree){
-		tree = newTree;
+		chapter = newTree;
 	}
 	
 	public ArrayList<Text> getTree(){
-		return tree;
+		return chapter;
 	}
 	
 	public int numOfNode(){
-		return tree.size();
+		return chapter.size();
 	}
 }

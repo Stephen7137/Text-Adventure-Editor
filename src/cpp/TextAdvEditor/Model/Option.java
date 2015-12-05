@@ -1,31 +1,14 @@
 package cpp.TextAdvEditor.Model;
 
-import java.util.ArrayList;
+public class Option extends Text {
 
-public class Option extends Node {
-
-	private ArrayList<String> oText;
+	private String optText;
 	
-	public Option(String title, String text, int nodeNum) {
-		super(title,text, nodeNum, 1);
+	public void setOptText(String optText){
+		this.optText = optText;
 	}
 	
-	public void setoText(ArrayList<String> oText){
-		this.oText = oText;
-	}
-	
-	public ArrayList<String> getoText(){
-		return oText;
-	}
-	
-	public void addChildNode(Node child, int num){
-		if(this.child.contains(child)){
-			this.child.remove(child);
-		}
-		this.child.add(num,child);
-	}
-	
-	public int setupChild(){
-		return oText.size();
+	public String getOptText(){
+		return optText;
 	}
 }

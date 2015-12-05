@@ -1,24 +1,13 @@
 package cpp.TextAdvEditor.Model;
-public class End extends Node {
+public class End extends Text {
 
-	private String nextFile;
+	private String chName;
 	
-	public End(String title, String text, String nextFile, int nodeNum) {
-		super(title,text, nodeNum, 2);
-		if(nextFile.equals("end")){
-			this.nextFile=null;
-		}else{
-			this.nextFile=nextFile;
-		}
+	public void setNextCh(String chName){
+		this.chName = chName;
 	}
 	
 	public String getNextFile(){
-		return nextFile;
+		return chName;
 	}
-
-	@Override
-	public Node getNextNode(int i) {
-		return null;
-	}
-
 }
