@@ -28,10 +28,10 @@
         </Menu>
             <Menu mnemonicParsing="false" text="Markers">
               <items>
-                <MenuItem mnemonicParsing="false" onAction="#addBookMark" text="Add to BookMark" />
-                  <MenuItem mnemonicParsing="false" onAction="#getBookMark" text="BookeMarks" />
-                  <MenuItem mnemonicParsing="false" onAction="#getLooseNode" text="Loose Nodes" />
-                  <MenuItem mnemonicParsing="false" onAction="#getOpenNode" text="Open Ndes" />
+                <MenuItem mnemonicParsing="false" text="Add to BookMark" />
+                  <MenuItem mnemonicParsing="false" text="BookeMarks" />
+                  <MenuItem mnemonicParsing="false" text="Loose Nodes" />
+                  <MenuItem mnemonicParsing="false" text="Open Ndes" />
               </items>
             </Menu>
         <Menu mnemonicParsing="false" text="Help">

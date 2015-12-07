@@ -30,7 +30,7 @@ public class SearchList {
 			stage.setTitle("Search Loose Nodes");
 			break;
 		case 2:
-			options = chapter.getOpenNode();
+			//options = chapter.getOpenNode();
 			stage.setTitle("Search Open Nodes");
 		}
 		

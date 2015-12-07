@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.nio.file.Path;
 
+import javax.swing.JFileChooser;
+
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -29,12 +31,10 @@ public class ProjectManager {
 	 * home file.
 	 */
 	public ProjectManager(){
-		editor = new ChapterEditor("");
 		fileChooser = new FileChooser();
 		fileChooser.getExtensionFilters().add(
 				new FileChooser.ExtensionFilter("Project file", "*.project"));
-		File start = new File(System.getProperty("user.home"));
-		fileChooser.setInitialDirectory(start);
+		//fileChooser.setInitialDirectory(JFileChooser());
 	}
 	
 	/**
@@ -43,10 +43,10 @@ public class ProjectManager {
 	 * loaded from a file.
 	 */
 	public void save(){
-		if(editor.chapter.getFileName().equals("")){
-			GetChapterName();
-			fileChooser.setInitialFileName(editor.chapter.getFileName());
-		}
+		//if(editor.chapter.getFileName().equals("")){
+		//	GetChapterName();
+		//	fileChooser.setInitialFileName(editor.chapter.getFileName());
+		//}
 		if(file == null){
 			saveAs();
 		}else{
@@ -94,10 +94,10 @@ public class ProjectManager {
 	 * @return true if a new project was created.
 	 */
 	public boolean newProject(){
-		if(!editor.isEmpty()){
-			if(eraseData()) return false;
-		}
-		editor = new ChapterEditor("");
+		//if(!editor.isEmpty()){
+		//	if(eraseData()) return false;
+		//}
+		//editor = new ChapterEditor("");
 		return true;
 	}
 	

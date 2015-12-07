@@ -1,5 +1,6 @@
 package cpp.TextAdvEditor.View;
 
+import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -20,5 +21,9 @@ public class SimConsole {
 	@FXML
 	private void back(){
 		
+	}
+
+	public void setStory(StringProperty textArea) {
+		this.story.textProperty().bind(textArea);	
 	}
 }

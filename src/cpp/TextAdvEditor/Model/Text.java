@@ -9,6 +9,11 @@ public class Text {
 	private ArrayList<Text> parent;
 	private ArrayList<Text> child;
 	
+	public Text(){
+		parent = new ArrayList<Text>();
+		child = new ArrayList<Text>();
+	}
+	
 	public void setTitle(String title){
 		this.title = title;
 	}
@@ -47,5 +52,13 @@ public class Text {
 	
 	public int getChildSize(){
 		return child.size();
+	}
+	
+	public void addChild(Text child){
+		this.child.add(child);
+	}
+	
+	public void addParent(Text child){
+		this.parent.add(child);
 	}
 }

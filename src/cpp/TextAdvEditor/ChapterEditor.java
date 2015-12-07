@@ -22,6 +22,10 @@ public class ChapterEditor{
 	
 	public ChapterEditor(Chapter chapter){
 		tree = chapter.getTree();
+		if(tree == null){
+			tree = new ArrayList<Text>();
+			tree.add(new Text());
+		}
 		bookmark = new ArrayList<Text>();
 		unFinished = new ArrayList<Text>();
 		loose = new ArrayList<Text>();
@@ -89,8 +93,26 @@ public class ChapterEditor{
 		return true;
 	}
 
-	public void createText(String title, String text) {
-		//TODO
+	public Text createText() {
+		Text text = new Text();
+		tree.add(text);
+		return text;
+	}
+	
+	public void addChild(){
+		Text nwText = new Text();
+		int childNum = selectedNode.getChildSize();
+		if( childNum == 0){
+			selectedNode.addChild(nwText);
+		}else if(childNum == 1){
+			//TODO
+			Text txtChild = selectedNode.getChild(0);
+			selectedNode.addChild((Option)txtChild);
+			selectedNode.addChild((Option)nwText);
+		}else{
+			selectedNode.addChild((Option)nwText);
+		}
+		nwText.addParent(selectedNode);
 	}
 
 	public void createOption(String title, String text,
