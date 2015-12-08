@@ -80,4 +80,10 @@ public class CanvasManager {
 		draw();
 		return isOnNode;
 	}
+
+	public void redraw(double width, double height) {
+		gc.setFill(Color.WHEAT);
+		gc.fillRect(0, 0, width, height);;
+		gc.setFill(Color.BLUE);
+	}
 }

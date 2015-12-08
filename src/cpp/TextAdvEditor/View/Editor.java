@@ -23,6 +23,9 @@ public class Editor {
 	
 	@FXML
 	private AnchorPane textInput;
+	
+	@FXML
+	private AnchorPane canvasPane;
 
 	private CanvasManager cnvsManager;
 	private ContextMenu contextMenu;
@@ -34,20 +37,28 @@ public class Editor {
 	
 	@FXML
 	private void mouseClick(MouseEvent e){
-		cnvsManager.onNode(e.getX(),e.getY());
+		Boolean onNode = cnvsManager.onNode(e.getX(),e.getY());
 		if(e.getButton() == MouseButton.SECONDARY){
 			contextMenu.show(canvas, e.getScreenX(), e.getScreenY());
 		}else{
 			contextMenu.hide();
 		}
-		cnvsManager.addCircle(e.getX(), e.getY());
+		if(e.getButton() == MouseButton.PRIMARY){
+			if(e.getClickCount() > 1){
+				cnvsManager.addCircle(e.getX(), e.getY());
+			}else{
+				
+			}
+		}
 	}
 
 	public void setCanvasManger(CanvasManager canvasManager) {
 		cnvsManager = canvasManager;
 		cnvsManager.setGrphCont(canvas.getGraphicsContext2D(), 
 				 canvas.getWidth(), canvas.getHeight());
-		
+		canvas.heightProperty().bind(canvasPane.heightProperty());
+		canvas.widthProperty().bind(canvasPane.widthProperty());
+		canvas.addEventHandler(eventType, eventHandler);
 		createContextMenu();
 	}
 
