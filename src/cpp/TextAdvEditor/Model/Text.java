@@ -8,10 +8,16 @@ public class Text {
 	private String text;
 	private ArrayList<Text> parent;
 	private ArrayList<Text> child;
+	private int key;
 	
-	public Text(){
+	public Text(int key){
+		this.key = key;
 		parent = new ArrayList<Text>();
 		child = new ArrayList<Text>();
+	}
+	
+	public int getKey(){
+		return key;
 	}
 	
 	public void setTitle(String title){

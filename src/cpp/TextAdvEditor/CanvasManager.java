@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import cpp.TextAdvEditor.Model.Text;
 import javafx.geometry.Point2D;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -16,21 +17,23 @@ public class CanvasManager {
 	private int diameter;
 	private int distance = 10;
 	private TreePoints selected;
+	private Color background = Color.WHITE;
+	private Canvas canvas;
 	
-	public CanvasManager(ChapterEditor editor){
+	public void setCanvas(Canvas canvas){
 		diameter = radious*2;
-		this.editor = editor;
-		tree = new ArrayList<TreePoints>();
+		this.canvas = canvas;
+		gc = canvas.getGraphicsContext2D();
+		update();
 	}
-
-	public void setGrphCont(GraphicsContext graphicsContext2D, 
-			double h, double w) {
-		gc = graphicsContext2D;
-		gc.setFill(Color.WHEAT);
-		gc.fillRect(0, 0, w, h);;
+	
+	public void update(){
+		gc.setFill(background);
+		gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 		gc.setFill(Color.BLUE);
 		gc.setStroke(Color.GREEN);
 		gc.setLineWidth(5);
+		draw();
 	}
 
 	public void addCircle(double x, double y) {
@@ -50,10 +53,8 @@ public class CanvasManager {
 	}
 	
 	private void draw(){
-		for(int i = 0; i < tree.size(); i++){
-			Point2D xy = tree.get(i).xy;
-			gc.strokeOval(xy.getX(), xy.getY(), diameter, diameter);
-		}
+		gc.strokeOval(radious, canvas.getHeight()/2,
+				diameter, diameter);
 	}
 	
 	class TreePoints{

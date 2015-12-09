@@ -94,13 +94,23 @@ public class ChapterEditor{
 	}
 
 	public Text createText() {
-		Text text = new Text();
+		Text text = new Text(getKey());
 		tree.add(text);
 		return text;
 	}
 	
+	public int getKey(){
+		int key = 0;
+		for(int i = 0; i < tree.size(); i++){
+			if(tree.get(i).getKey() == key){
+				
+			}
+		}
+		return key;
+	}
+	
 	public void addChild(){
-		Text nwText = new Text();
+		Text nwText = new Text(getKey());
 		int childNum = selectedNode.getChildSize();
 		if( childNum == 0){
 			selectedNode.addChild(nwText);
@@ -183,5 +193,9 @@ public class ChapterEditor{
 			if(list.get(i).getTitle().equals(search)) return list.get(i);
 		}
 		return null;
+	}
+
+	public boolean hasNodes() {
+		return tree.size() > 0;
 	}
 }

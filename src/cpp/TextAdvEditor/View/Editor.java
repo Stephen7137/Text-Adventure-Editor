@@ -1,6 +1,8 @@
 package cpp.TextAdvEditor.View;
 
 import cpp.TextAdvEditor.CanvasManager;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
@@ -54,11 +56,28 @@ public class Editor {
 
 	public void setCanvasManger(CanvasManager canvasManager) {
 		cnvsManager = canvasManager;
-		cnvsManager.setGrphCont(canvas.getGraphicsContext2D(), 
-				 canvas.getWidth(), canvas.getHeight());
-		canvas.heightProperty().bind(canvasPane.heightProperty());
-		canvas.widthProperty().bind(canvasPane.widthProperty());
-		canvas.addEventHandler(eventType, eventHandler);
+		cnvsManager.setCanvas(canvas);
+		
+		canvasPane.heightProperty().addListener(new ChangeListener<Number>(){
+
+			@Override
+			public void changed(ObservableValue<? extends Number> observableValue,
+					Number oldHeight, Number newHeight) {
+				canvas.heightProperty().set((double) newHeight );
+				cnvsManager.update();
+			}
+		});
+	
+		canvasPane.widthProperty().addListener(new ChangeListener<Number>(){
+	
+			@Override
+			public void changed(ObservableValue<? extends Number> observableValue,
+					Number oldWidth, Number newWidth) {
+				canvas.widthProperty().set((double) newWidth );
+				cnvsManager.update();
+			}
+		});
+		
 		createContextMenu();
 	}
 
