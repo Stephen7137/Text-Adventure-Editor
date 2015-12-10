@@ -14,12 +14,7 @@ public class SearchListControler {
 	
 	@FXML
 	private TextField text;
-	
-	@FXML
-	private void search(){
-		if(text.getText()!=null) box.setItems(searchList.search(text.getText()));
-	}
-	
+		
 	@FXML
 	private void select(){
 		if(box.getValue()!=null){

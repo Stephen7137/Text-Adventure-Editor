@@ -33,7 +33,7 @@ public class Main extends Application {
 	
 	private Scene createScene() throws IOException{
 		
-		ChapterEditor CHeditor = new ChapterEditor(new Chapter());
+		ChapterEditor CHeditor = new ChapterEditor();
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(Main.class.getResource("Text Adv Editor GUI.fxml"));
 		Scene scene = new Scene(loader.load(),width,height);

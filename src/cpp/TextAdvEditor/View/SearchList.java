@@ -65,19 +65,4 @@ public class SearchList {
 			chapter.setOpenNode(selected);
 		}
 	}
-
-	public ObservableList<String> search(String text) {
-		switch(type){
-		case 0:
-			chapter.getBookMark(text);
-			break;
-		case 1:
-			chapter.getLooseNode(text);
-			break;
-		case 2:
-			chapter.getOpenNode(text);
-		}
-		return null;
-	}
-
 }

@@ -1,6 +1,8 @@
 package cpp.TextAdvEditor;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Set;
 
 import cpp.TextAdvEditor.Model.Text;
 import javafx.geometry.Point2D;
@@ -11,12 +13,10 @@ import javafx.scene.paint.Color;
 public class CanvasManager {
 	
 	private GraphicsContext gc;
-	private ChapterEditor editor;
-	private ArrayList<TreePoints> tree;
 	private int radious = 15;
 	private int diameter;
 	private int distance = 10;
-	private TreePoints selected;
+	private Map<Integer,TreePoint> lookup;
 	private Color background = Color.WHITE;
 	private Canvas canvas;
 	
@@ -35,19 +35,11 @@ public class CanvasManager {
 		gc.setLineWidth(5);
 		draw();
 	}
-
-	public void addCircle(double x, double y) {
-		x-=radious;
-		y-=radious;
-		if(checkArea(x,y)){
-			tree.add(new TreePoints(x, y, editor.createText()));
-		}
-		draw();
-	}
 	
 	private boolean checkArea(double x, double y){
-		for(int i = 0; i < tree.size(); i++){
-			if(tree.get(i).xy.distance(x, y) <= diameter + distance) return false;
+		Integer[] keys = (Integer[]) lookup.keySet().toArray();
+		for(int i = 0; i < keys.length; i++){
+			if(lookup.get(keys[i]).xy.distance(x, y) <= diameter + distance) return false;
 		}
 		return true;
 	}
@@ -57,34 +49,22 @@ public class CanvasManager {
 				diameter, diameter);
 	}
 	
-	class TreePoints{
-		Point2D xy;
-		Text text;
-		
-		public TreePoints(double x, double y, Text text){
-			xy = new Point2D(x,y);
-			this.text = text;
-		}
-	}
-
-	public boolean onNode(double x, double y) {
+	public int onNode(double x, double y) {
 		x-=radious;
 		y-=radious;
-		boolean isOnNode = false;
-		for(int i = 0; i < tree.size(); i++){
-			if(tree.get(i).xy.distance(x, y) <= radious){
-				selected = tree.get(i);
-				i = tree.size();
-				isOnNode = true;
-			}
+		Integer[] keys = (Integer[]) lookup.keySet().toArray();
+		for(int i = 0; i < keys.length; i++){
+			if(lookup.get(keys[i]).xy.distance(x, y) <= radious) return keys[i];
 		}
-		draw();
-		return isOnNode;
+		return -1;
 	}
-
-	public void redraw(double width, double height) {
-		gc.setFill(Color.WHEAT);
-		gc.fillRect(0, 0, width, height);;
-		gc.setFill(Color.BLUE);
+	
+	class TreePoint{
+		Point2D xy;
+		ArrayList<Integer> child;
+		
+		public TreePoint(double x, double y, Text text){
+			xy = new Point2D(x,y);
+		}
 	}
 }

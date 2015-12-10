@@ -39,18 +39,14 @@ public class Editor {
 	
 	@FXML
 	private void mouseClick(MouseEvent e){
-		Boolean onNode = cnvsManager.onNode(e.getX(),e.getY());
+		int nodeKey = cnvsManager.onNode(e.getX(),e.getY());
 		if(e.getButton() == MouseButton.SECONDARY){
 			contextMenu.show(canvas, e.getScreenX(), e.getScreenY());
 		}else{
 			contextMenu.hide();
 		}
 		if(e.getButton() == MouseButton.PRIMARY){
-			if(e.getClickCount() > 1){
-				cnvsManager.addCircle(e.getX(), e.getY());
-			}else{
-				
-			}
+		
 		}
 	}
 
@@ -83,7 +79,7 @@ public class Editor {
 
 	private void createContextMenu() {
 		MenuItem addChild = new MenuItem("add Child");
-		MenuItem addNode = new MenuItem("Create Node");
+		MenuItem addNode = new MenuItem("set Current");
 		
 		contextMenu = new ContextMenu(addChild,addNode);
 	}

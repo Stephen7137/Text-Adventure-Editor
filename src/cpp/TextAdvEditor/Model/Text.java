@@ -67,4 +67,8 @@ public class Text {
 	public void addParent(Text child){
 		this.parent.add(child);
 	}
+
+	public Text popChild(int i) {
+		return child.remove(i);
+	}
 }

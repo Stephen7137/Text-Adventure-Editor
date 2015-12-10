@@ -1,6 +1,8 @@
 package cpp.TextAdvEditor;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Random;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -15,17 +17,16 @@ public class ChapterEditor{
 	private ArrayList<Text>	unFinished;
 	private ArrayList<Text>	bookmark;
 	private ArrayList<Text> tree;
+	private Map<Integer,Text> lookup;
 	private Text currentNode;
 	private Text selectedNode;
 	
 	private StringProperty story;
 	
-	public ChapterEditor(Chapter chapter){
-		tree = chapter.getTree();
-		if(tree == null){
-			tree = new ArrayList<Text>();
-			tree.add(new Text());
-		}
+	public ChapterEditor(){
+		tree = new ArrayList<Text>();
+		currentNode = createText();
+		selectedNode = null;
 		bookmark = new ArrayList<Text>();
 		unFinished = new ArrayList<Text>();
 		loose = new ArrayList<Text>();
@@ -40,14 +41,7 @@ public class ChapterEditor{
 	protected void updateText(){
 		if(currentNode != null){
 			story.setValue(currentNode.getText());
-			if(currentNode.getChildSize() > 1){
-				ArrayList<Text> children = currentNode.getChild();
-				for(int i = 0; i < children.size(); i++ ){
-					story.concat("\n" + (i+1) + ") " + (Option)children.get(i));
-				}
-			}
 		}
-		
 	}
 	
 	public StringProperty getStory(){
@@ -83,7 +77,7 @@ public class ChapterEditor{
 	public void addBookmark(){
 		bookmark.add(selectedNode);
 	}
-	
+		
 	public boolean next(int input){
 		if(input >= currentNode.getChildSize())return false;
 		
@@ -93,45 +87,38 @@ public class ChapterEditor{
 		return true;
 	}
 
-	public Text createText() {
+	private Text createText() {
 		Text text = new Text(getKey());
 		tree.add(text);
+		lookup.put(text.getKey(), text);
 		return text;
 	}
 	
 	public int getKey(){
-		int key = 0;
-		for(int i = 0; i < tree.size(); i++){
-			if(tree.get(i).getKey() == key){
-				
-			}
-		}
+		Random ranKey = new Random();
+		int key = -1;
+		do{
+			key = ranKey.nextInt(10000);
+		}while(lookup.containsKey(key));
+		
 		return key;
 	}
 	
-	public void addChild(){
-		Text nwText = new Text(getKey());
+	public int addChild(){
+		Text nwText = createText();
 		int childNum = selectedNode.getChildSize();
 		if( childNum == 0){
 			selectedNode.addChild(nwText);
 		}else if(childNum == 1){
 			//TODO
-			Text txtChild = selectedNode.getChild(0);
+			Text txtChild = selectedNode.popChild(0);
 			selectedNode.addChild((Option)txtChild);
 			selectedNode.addChild((Option)nwText);
 		}else{
 			selectedNode.addChild((Option)nwText);
 		}
 		nwText.addParent(selectedNode);
-	}
-
-	public void createOption(String title, String text,
-			ArrayList<String> optionText) {
-		//TODO
-	}
-
-	public void createEnd(String title, String text, String file) {
-		//TODO
+		return nwText.getKey();
 	}
 	
 	public ObservableList<String> getBookMark() {
@@ -154,19 +141,19 @@ public class ChapterEditor{
 		return options;
 	}
 	
-	public ObservableList<String> getBookMark(String search) {
-		return compList(bookmark,search);
+	public ObservableList<String> searchBookMark(String search) {
+		return searchList(bookmark,search);
 	}
 
-	public ObservableList<String> getLooseNode(String search) {
-		return compList(loose,search);
+	public ObservableList<String> searchLooseNode(String search) {
+		return searchList(loose,search);
 	}
 
-	public ObservableList<String> getOpenNode(String search) {
-		return compList(unFinished,search);
+	public ObservableList<String> searchOpenNode(String search) {
+		return searchList(unFinished,search);
 	}
 	
-	private ObservableList<String> compList(ArrayList<Text> list, String search){
+	private ObservableList<String> searchList(ArrayList<Text> list, String search){
 		ObservableList<String> options = FXCollections.observableArrayList();
 		for(int i = 0; i < list.size(); i++){
 			if(list.get(i).getTitle().toLowerCase().contains(search.toLowerCase())){
