@@ -19,5 +19,6 @@
             <Canvas fx:id="canvas" height="537.0" onMouseClicked="#mouseClick" width="509.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
          </children>
       </AnchorPane>
+      <Button layoutX="271.0" layoutY="2.0" mnemonicParsing="false" onAction="#addChild" text="Add Child" AnchorPane.leftAnchor="271.0" AnchorPane.topAnchor="2.0" />
    </children>
 </AnchorPane>

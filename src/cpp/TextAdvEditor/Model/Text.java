@@ -4,10 +4,10 @@ import java.util.ArrayList;
 
 public class Text {
 
-	private String title;
-	private String text;
-	private ArrayList<Text> parent;
-	private ArrayList<Text> child;
+	protected String title;
+	protected String text;
+	protected ArrayList<Text> parent;
+	protected ArrayList<Text> child;
 	private int key;
 	
 	public Text(int key){
@@ -64,8 +64,8 @@ public class Text {
 		this.child.add(child);
 	}
 	
-	public void addParent(Text child){
-		this.parent.add(child);
+	public void addParent(Text parent){
+		this.parent.add(parent);
 	}
 
 	public Text popChild(int i) {

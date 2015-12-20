@@ -1,6 +1,7 @@
 package cpp.TextAdvEditor.View;
 
 import cpp.TextAdvEditor.CanvasManager;
+import cpp.TextAdvEditor.ChapterEditor;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
@@ -31,6 +32,7 @@ public class Editor {
 
 	private CanvasManager cnvsManager;
 	private ContextMenu contextMenu;
+	ChapterEditor cHeditor;
 	
 	@FXML
 	private void select(){
@@ -39,20 +41,25 @@ public class Editor {
 	
 	@FXML
 	private void mouseClick(MouseEvent e){
-		int nodeKey = cnvsManager.onNode(e.getX(),e.getY());
-		if(e.getButton() == MouseButton.SECONDARY){
-			contextMenu.show(canvas, e.getScreenX(), e.getScreenY());
-		}else{
-			contextMenu.hide();
-		}
+//		if(e.getButton() == MouseButton.SECONDARY){
+//			contextMenu.show(canvas, e.getScreenX(), e.getScreenY());
+//		}else{
+//			contextMenu.hide();
+//		}
 		if(e.getButton() == MouseButton.PRIMARY){
-		
+			System.out.println(cnvsManager.onNode(e.getX(),e.getY()));
 		}
 	}
+	
+	@FXML
+	private void addChild(){
+		cnvsManager.addChild(cHeditor.addChild(cnvsManager.getSelected()));
+	}
 
-	public void setCanvasManger(CanvasManager canvasManager) {
+	public void setCanvasManger(CanvasManager canvasManager, ChapterEditor cHeditor) {
+		this.cHeditor = cHeditor;
 		cnvsManager = canvasManager;
-		cnvsManager.setCanvas(canvas);
+		cnvsManager.setCanvas(canvas,cHeditor.currentKey());
 		
 		canvasPane.heightProperty().addListener(new ChangeListener<Number>(){
 
@@ -78,6 +85,7 @@ public class Editor {
 	}
 
 	private void createContextMenu() {
+		
 		MenuItem addChild = new MenuItem("add Child");
 		MenuItem addNode = new MenuItem("set Current");
 		

@@ -17,15 +17,17 @@ public class ChapterEditor{
 	private ArrayList<Text>	unFinished;
 	private ArrayList<Text>	bookmark;
 	private ArrayList<Text> tree;
-	private Map<Integer,Text> lookup;
 	private Text currentNode;
 	private Text selectedNode;
+	Random keyGen;
 	
 	private StringProperty story;
 	
 	public ChapterEditor(){
+		keyGen = new Random();
 		tree = new ArrayList<Text>();
 		currentNode = createText();
+		tree.add(currentNode);
 		selectedNode = null;
 		bookmark = new ArrayList<Text>();
 		unFinished = new ArrayList<Text>();
@@ -88,37 +90,45 @@ public class ChapterEditor{
 	}
 
 	private Text createText() {
-		Text text = new Text(getKey());
-		tree.add(text);
-		lookup.put(text.getKey(), text);
+		Text text = new Text(createKey());
 		return text;
 	}
 	
-	public int getKey(){
-		Random ranKey = new Random();
-		int key = -1;
-		do{
-			key = ranKey.nextInt(10000);
-		}while(lookup.containsKey(key));
-		
-		return key;
+	private int createKey(){
+		return keyGen.nextInt(10000);
 	}
 	
-	public int addChild(){
+	public int getKey(){
+		return currentNode.getKey();
+	}
+	
+	public int addChild(int i){
+		Text pText = searchTree(i);
 		Text nwText = createText();
-		int childNum = selectedNode.getChildSize();
+		int childNum = pText.getChildSize();
+		nwText.addParent(pText);
 		if( childNum == 0){
-			selectedNode.addChild(nwText);
-		}else if(childNum == 1){
-			//TODO
-			Text txtChild = selectedNode.popChild(0);
-			selectedNode.addChild((Option)txtChild);
-			selectedNode.addChild((Option)nwText);
+			pText.addChild(nwText);
+			tree.add(nwText);
+			}else if(childNum == 1){
+			Text txtChild = pText.popChild(0);
+			tree.remove(txtChild);
+			pText.addChild(new Option(txtChild));
+			pText.addChild(new Option(nwText));
+			tree.add(pText.getChild(0));
+			tree.add(pText.getChild(1));
 		}else{
-			selectedNode.addChild((Option)nwText);
+			pText.addChild(new Option(nwText));
+			tree.add(pText.getChild(pText.getChildSize() - 1));
 		}
-		nwText.addParent(selectedNode);
 		return nwText.getKey();
+	}
+	
+	private Text searchTree(int key){
+		for(int i = 0; i < tree.size(); i++){
+			if(tree.get(i).getKey() == key)return tree.get(i);
+		}
+		return null;
 	}
 	
 	public ObservableList<String> getBookMark() {
@@ -184,5 +194,9 @@ public class ChapterEditor{
 
 	public boolean hasNodes() {
 		return tree.size() > 0;
+	}
+
+	public int currentKey() {
+		return currentNode.getKey();
 	}
 }

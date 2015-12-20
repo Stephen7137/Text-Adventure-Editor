@@ -48,7 +48,7 @@ public class Main extends Application {
 		loader.setLocation(Main.class.getResource("Editor.fxml"));
 		controller.addTab("Overview", loader.load());
 		Editor editor = loader.getController();
-		editor.setCanvasManger(new CanvasManager());
+		editor.setCanvasManger(new CanvasManager(),CHeditor);
 		return scene;
 	}
 			
