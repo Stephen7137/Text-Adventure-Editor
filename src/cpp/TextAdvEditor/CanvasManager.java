@@ -26,7 +26,7 @@ public class CanvasManager {
 		diameter = radious*2;
 		lookup = new ArrayList<TreePoint>();
 		lookup.add(new TreePoint(radious,canvas.getHeight()/2 , key));
-		selected = lookup.get(0).id;
+		selected = -1;
 		this.canvas = canvas;
 		gc = canvas.getGraphicsContext2D();
 		update();
@@ -57,7 +57,12 @@ public class CanvasManager {
 				TreePoint point1 = lookup.get(i).parent.get(j);
 				gc.strokeLine(point.xy.getX(), point.xy.getY(), 
 						point1.xy.getX(), point1.xy.getY());
-			}
+			}	
+		}
+		if(selected > -1){
+			TreePoint point = searchTree();
+			gc.strokeOval(point.xy.getX()-radious, point.xy.getY()-radious,
+					diameter, diameter);
 		}
 	}
 	
@@ -65,6 +70,7 @@ public class CanvasManager {
 		for(int i = 0; i < lookup.size(); i++){
 			if(lookup.get(i).xy.distance(x, y) <= radious){
 				selected = lookup.get(i).id;
+				update();
 				return selected;
 			}
 		}

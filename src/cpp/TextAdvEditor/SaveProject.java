@@ -13,8 +13,10 @@ public class SaveProject implements Serializable{
 	private ArrayList<Text> open;
 	private ArrayList<Text> loose;
 	private Story story;
+	CanvasManager cnvsManager;
 	
-	public SaveProject(ChapterEditor editor){
-		//TODO
+	public SaveProject(CanvasManager cnvsManager, ChapterEditor editor){
+		this.cnvsManager = cnvsManager;
+		
 	}
 }

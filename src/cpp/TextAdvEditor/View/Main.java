@@ -21,10 +21,10 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			Scene scene = createScene();
-			primaryStage.setMinHeight(scene.getHeight());
-			primaryStage.setMinWidth(scene.getWidth());
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("TA Editor");
+			primaryStage.setMinHeight(primaryStage.getHeight());
+			primaryStage.setMinWidth(primaryStage.getWidth());
 			primaryStage.show();
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -33,22 +33,23 @@ public class Main extends Application {
 	
 	private Scene createScene() throws IOException{
 		
-		ChapterEditor CHeditor = new ChapterEditor();
+		ChapterEditor cHeditor = new ChapterEditor();
+		CanvasManager cnvsManager = new CanvasManager();
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(Main.class.getResource("Text Adv Editor GUI.fxml"));
 		Scene scene = new Scene(loader.load(),width,height);
 		TextAdvEditorControler controller = loader.getController();
-		controller.setWriteChapter(new ProjectManager());
+		controller.setWriteChapter(new ProjectManager(cnvsManager, cHeditor));
 		loader = new FXMLLoader();
 		loader.setLocation(Main.class.getResource("SimConsole.fxml"));
 		controller.addTab("Console", loader.load());
 		SimConsole console = loader.getController();
-		console.setStory(CHeditor.getStory());
+		console.cHeditor(cHeditor);
 		loader = new FXMLLoader();
 		loader.setLocation(Main.class.getResource("Editor.fxml"));
 		controller.addTab("Overview", loader.load());
 		Editor editor = loader.getController();
-		editor.setCanvasManger(new CanvasManager(),CHeditor);
+		editor.setCanvasManger(cnvsManager, cHeditor);
 		return scene;
 	}
 			

@@ -22,6 +22,7 @@ import javafx.stage.Stage;
 public class ProjectManager {
 	
 	ChapterEditor editor;
+	CanvasManager cnvsManager;
 	FileChooser fileChooser;
 	File file;
 	
@@ -30,7 +31,9 @@ public class ProjectManager {
 	 * {@link #fileChooser}. The starting location for {@link #fileChooser} is users
 	 * home file.
 	 */
-	public ProjectManager(){
+	public ProjectManager(CanvasManager cnvsManager, ChapterEditor editor){
+		this.editor = editor;
+		this.cnvsManager = cnvsManager;
 		fileChooser = new FileChooser();
 		fileChooser.getExtensionFilters().add(
 				new FileChooser.ExtensionFilter("Project file", "*.project"));
@@ -53,11 +56,6 @@ public class ProjectManager {
 			saveChapter();
 		}
 	}
-	
-	private void GetChapterName() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	/**
 	 * Ask the user for location of where to save the project and saves the location
@@ -78,7 +76,7 @@ public class ProjectManager {
 		try {
 			FileOutputStream fos = new FileOutputStream(file);
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
-			SaveProject save = new SaveProject(editor);
+			SaveProject save = new SaveProject(cnvsManager, editor);
 			oos.writeObject(save);
 			oos.close();
 		} catch (IOException e) {

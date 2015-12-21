@@ -40,7 +40,7 @@ public class ChapterEditor{
 		//TODO
 	}
 		
-	protected void updateText(){
+	public void updateText(){
 		if(currentNode != null){
 			story.setValue(currentNode.getText());
 		}
@@ -198,5 +198,26 @@ public class ChapterEditor{
 
 	public int currentKey() {
 		return currentNode.getKey();
+	}
+
+	public void setSelected(int key) {
+		selectedNode = searchTree(key);
+	}
+
+	public Text getSelected() {
+		return selectedNode;
+	}
+
+	public void setCurrent(int selected) {
+		currentNode = selectedNode;
+		updateText();
+	}
+
+	public boolean isCurrent() {
+		return currentNode == selectedNode;
+	}
+
+	public boolean curHasChildren() {
+		return currentNode.getChildSize()>1;
 	}
 }
