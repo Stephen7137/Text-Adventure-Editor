@@ -51,6 +51,13 @@ story's options.
 Scene tab TBA
 
 --------------------------------------------------------------------------------
+TA Editor Alpha 1.1
+- add edit node support
+- add overview of nodes
+- add function to console simulator
+- add ability to add children to nodes
+- able to select nodes
+- able set nodes to current node
 
 TA Editor Alpha 1.0
 First release of TA Editor
