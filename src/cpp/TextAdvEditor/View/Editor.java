@@ -7,19 +7,14 @@ import cpp.TextAdvEditor.ChapterEditor;
 import cpp.TextAdvEditor.Model.Text;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
 
 public class Editor {
 	
@@ -67,8 +62,14 @@ public class Editor {
 	@FXML
 	private void mouseClick(MouseEvent e){
 		if(e.getButton() == MouseButton.PRIMARY){
-			cHeditor.setSelected(cnvsManager.onNode(e.getX(),e.getY()));
-			updateEditor(cHeditor.getSelected());
+			if(cnvsManager.onNode(e.getX(),e.getY()) >= 0){
+				cHeditor.setSelected(cnvsManager.getSelected());
+				updateEditor(cHeditor.getSelected());
+			}else if(e.getClickCount() > 1){
+				disable();
+				cHeditor.setSelected(-1);
+				cnvsManager.resetSelected();
+			}
 		}
 	}
 	
@@ -91,10 +92,7 @@ public class Editor {
 			}else{
 				//TODO
 			}
-		}else{
-			disable();
-		}
-		
+		}		
 	}
 
 	public void setCanvasManger(CanvasManager canvasManager, ChapterEditor cHeditor) {

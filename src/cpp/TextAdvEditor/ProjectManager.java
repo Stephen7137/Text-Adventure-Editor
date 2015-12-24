@@ -1,14 +1,12 @@
 package cpp.TextAdvEditor;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.nio.file.Path;
-
-import javax.swing.JFileChooser;
-
+import cpp.TextAdvEditor.Model.Story;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -23,6 +21,7 @@ public class ProjectManager {
 	
 	ChapterEditor editor;
 	CanvasManager cnvsManager;
+	SaveProject save;
 	FileChooser fileChooser;
 	File file;
 	
@@ -31,9 +30,11 @@ public class ProjectManager {
 	 * {@link #fileChooser}. The starting location for {@link #fileChooser} is users
 	 * home file.
 	 */
-	public ProjectManager(CanvasManager cnvsManager, ChapterEditor editor){
+	public ProjectManager(Story story, CanvasManager cnvsManager, ChapterEditor editor){
 		this.editor = editor;
 		this.cnvsManager = cnvsManager;
+		save = new SaveProject(story);
+		save.addManagers(cnvsManager, editor);
 		fileChooser = new FileChooser();
 		fileChooser.getExtensionFilters().add(
 				new FileChooser.ExtensionFilter("Project file", "*.project"));
@@ -53,7 +54,7 @@ public class ProjectManager {
 		if(file == null){
 			saveAs();
 		}else{
-			saveChapter();
+			saveProject();
 		}
 	}
 
@@ -64,7 +65,7 @@ public class ProjectManager {
 	public void saveAs(){
 		file = fileChooser.showSaveDialog(new Stage());
         if (file != null) {
-        	saveChapter();
+        	saveProject();
         }
 	}
 	
@@ -72,16 +73,32 @@ public class ProjectManager {
 	 * Creates SaveProject and saves the object to a file with the file name
 	 * the same as the Chapter title.
 	 */
-	private void saveChapter(){
+	private void saveProject(){
 		try {
 			FileOutputStream fos = new FileOutputStream(file);
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
-			SaveProject save = new SaveProject(cnvsManager, editor);
+			save.update(cnvsManager, editor);
 			oos.writeObject(save);
 			oos.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+	
+	public void load(){
+		file = fileChooser.showOpenDialog(new Stage());
+		if(file != null){
+			try {
+				FileInputStream fos = new FileInputStream(file);
+				ObjectInputStream oos = new ObjectInputStream(fos);
+				save = (SaveProject) oos.readObject();
+				save.loadProject(cnvsManager, editor);
+				oos.close();
+			} catch (IOException | ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	

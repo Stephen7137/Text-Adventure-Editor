@@ -1,9 +1,14 @@
 package cpp.TextAdvEditor.Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Text {
+public class Text implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6064370901268149364L;
 	protected String title;
 	protected String text;
 	protected ArrayList<Text> parent;

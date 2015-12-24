@@ -2,6 +2,11 @@ package cpp.TextAdvEditor.Model;
 
 public class Option extends Text {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5350051473876561916L;
+
 	public Option(int key) {
 		super(key);
 	}

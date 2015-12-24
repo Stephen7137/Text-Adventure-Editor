@@ -29,7 +29,7 @@ public class TextAdvEditorControler {
 	
 	@FXML
 	private void load(){
-		
+		manager.load();
 	}
 			
 	public void setWriteChapter(ProjectManager manager){
