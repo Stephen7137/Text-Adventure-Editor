@@ -16,7 +16,6 @@ public class Chapter implements Serializable{
 	public Chapter(int ID){
 		tree = new ArrayList<Text>();
 		this.ID = ID;
-		tree.add(new Text(ID));
 	}
 	
 	public void setCHName(String chName){

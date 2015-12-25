@@ -37,7 +37,8 @@ public class Editor {
 	private AnchorPane option;
 
 	private CanvasManager cnvsManager;
-	ChapterEditor cHeditor;
+	private ChapterEditor cHeditor;
+	private boolean onSelected;
 	
 	@FXML
 	private void select(){
@@ -60,12 +61,37 @@ public class Editor {
 	}
 	
 	@FXML
+	private void onPress(MouseEvent e){
+		switch(cnvsManager.tools(e.getX(),e.getY())){
+		case 0:
+			cnvsManager.createNode(e.getX(),e.getY(), cHeditor.createText());
+			break;
+		}
+		if(cnvsManager.onSelected(e.getX(),e.getY())){
+			onSelected = true;
+		}
+	}
+	
+	@FXML
+	private void onRelease(){
+		onSelected = false;
+	}
+	
+	@FXML
+	private void follow(MouseEvent e){
+		if(onSelected){
+			cnvsManager.moveNode(e.getX(),e.getY());
+		}
+	}
+	
+	@FXML
 	private void mouseClick(MouseEvent e){
 		if(e.getButton() == MouseButton.PRIMARY){
+			int press = e.getClickCount();
 			if(cnvsManager.onNode(e.getX(),e.getY()) >= 0){
 				cHeditor.setSelected(cnvsManager.getSelected());
 				updateEditor(cHeditor.getSelected());
-			}else if(e.getClickCount() > 1){
+			}else if( press > 1){
 				disable();
 				cHeditor.setSelected(-1);
 				cnvsManager.resetSelected();
@@ -98,6 +124,7 @@ public class Editor {
 	public void setCanvasManger(CanvasManager canvasManager, ChapterEditor cHeditor) {
 		this.cHeditor = cHeditor;
 		cnvsManager = canvasManager;
+		onSelected = false;
 		cnvsManager.setCanvas(canvas,cHeditor.currentKey());
 		
 		canvasPane.heightProperty().addListener(new ChangeListener<Number>(){

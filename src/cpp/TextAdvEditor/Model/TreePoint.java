@@ -11,12 +11,14 @@ public class TreePoint implements Serializable{
 	 */
 	private static final long serialVersionUID = 6720937507684278878L;
 	private int id;
-	private transient Point2D xy;
+	private double x;
+	private double y;
 	private ArrayList<TreePoint> parent;
 	private ArrayList<TreePoint> child;
 	
 	public TreePoint(double x, double y, int id){
-		xy = new Point2D(x,y);
+		this.x = x;
+		this.y = y;
 		parent = new ArrayList<TreePoint>();
 		child = new ArrayList<TreePoint>();
 		this.id = id;
@@ -26,20 +28,29 @@ public class TreePoint implements Serializable{
 		return id;
 	}
 	
-	public Point2D getXY(){
-		return xy;
+	public double getX(){
+		return x;
+	}
+	
+	public double getY(){
+		return y;
 	}
 	
 	public ArrayList<TreePoint> getChild(){
 		return child;
 	}
 	
+	public TreePoint getChild(int j){
+		return child.get(j);
+	}
+	
 	public ArrayList<TreePoint> getParent(){
 		return parent;
 	}
 
-	public void setXY(Point2D newPoint) {
-		xy = newPoint;		
+	public void setXY(double x, double y) {
+		this.x = x;
+		this.y = y;		
 	}
 
 	public int childsize() {
@@ -64,5 +75,13 @@ public class TreePoint implements Serializable{
 
 	public TreePoint getParent(int j) {
 		return parent.get(j);
+	}
+
+	public double distance(double x2, double y2) {
+		x2 -= x;
+		y2 -= y;
+		x2 *= x2;
+		y2 *= y2;
+		return Math.sqrt(x2 + y2);
 	}
 }

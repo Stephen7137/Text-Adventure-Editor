@@ -26,8 +26,7 @@ public class ChapterEditor{
 		this.chapterID = chapterID;
 		keyGen = new Random();
 		this.tree = tree;
-		currentNode = createText();
-		this.tree.add(currentNode);
+		currentNode = null;
 		selectedNode = null;
 		bookmark = new ArrayList<Text>();
 		noParent = new ArrayList<Text>();
@@ -89,9 +88,13 @@ public class ChapterEditor{
 		return true;
 	}
 
-	private Text createText() {
-		Text text = new Text(createKey());
-		return text;
+
+	public int createText() {
+		Text newText = new Text(createKey());
+		noParent.add(newText);
+		noChild.add(newText);
+		tree.add(newText);
+		return newText.getKey();
 	}
 	
 	private int createKey(){
@@ -99,13 +102,14 @@ public class ChapterEditor{
 	}
 	
 	public int getKey(){
+		if(currentNode == null) return -1;
 		return currentNode.getKey();
 	}
 	
 	public int addChild(int i){
 		if(i >= 0){
 			Text pText = searchTree(i);
-			Text nwText = createText();
+			Text nwText = new Text(getKey());
 			int childNum = pText.getChildSize();
 			nwText.addParent(pText);
 			if( childNum == 0){
@@ -202,6 +206,7 @@ public class ChapterEditor{
 	}
 
 	public int currentKey() {
+		if(currentNode == null) return -1;
 		return currentNode.getKey();
 	}
 
@@ -234,6 +239,7 @@ public class ChapterEditor{
 		this.noParent = noParent;
 		this.noChild = noChild;
 		this.bookmark = bookmark;
+		updateText();
 	}
 
 	public int getCHID() {
