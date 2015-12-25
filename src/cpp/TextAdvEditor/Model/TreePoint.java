@@ -3,22 +3,18 @@ package cpp.TextAdvEditor.Model;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import javafx.geometry.Point2D;
-
 public class TreePoint implements Serializable{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 6720937507684278878L;
 	private int id;
-	private double x;
-	private double y;
+	private SimpPoint2D point;
 	private ArrayList<TreePoint> parent;
 	private ArrayList<TreePoint> child;
 	
 	public TreePoint(double x, double y, int id){
-		this.x = x;
-		this.y = y;
+		point = new SimpPoint2D(x,y);
 		parent = new ArrayList<TreePoint>();
 		child = new ArrayList<TreePoint>();
 		this.id = id;
@@ -29,11 +25,11 @@ public class TreePoint implements Serializable{
 	}
 	
 	public double getX(){
-		return x;
+		return point.getX();
 	}
 	
 	public double getY(){
-		return y;
+		return point.getY();
 	}
 	
 	public ArrayList<TreePoint> getChild(){
@@ -49,8 +45,7 @@ public class TreePoint implements Serializable{
 	}
 
 	public void setXY(double x, double y) {
-		this.x = x;
-		this.y = y;		
+		point.setPoint(x, y);	
 	}
 
 	public int childsize() {
@@ -77,11 +72,7 @@ public class TreePoint implements Serializable{
 		return parent.get(j);
 	}
 
-	public double distance(double x2, double y2) {
-		x2 -= x;
-		y2 -= y;
-		x2 *= x2;
-		y2 *= y2;
-		return Math.sqrt(x2 + y2);
+	public double distance(double x, double y) {
+		return point.distance(x, y);
 	}
 }

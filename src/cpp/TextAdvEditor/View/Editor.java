@@ -39,6 +39,7 @@ public class Editor {
 	private CanvasManager cnvsManager;
 	private ChapterEditor cHeditor;
 	private boolean onSelected;
+	private boolean onConnect;
 	
 	@FXML
 	private void select(){
@@ -62,33 +63,9 @@ public class Editor {
 	
 	@FXML
 	private void onPress(MouseEvent e){
-		switch(cnvsManager.tools(e.getX(),e.getY())){
-		case 0:
-			cnvsManager.createNode(e.getX(),e.getY(), cHeditor.createText());
-			break;
-		}
-		if(cnvsManager.onSelected(e.getX(),e.getY())){
-			onSelected = true;
-		}
-	}
-	
-	@FXML
-	private void onRelease(){
-		onSelected = false;
-	}
-	
-	@FXML
-	private void follow(MouseEvent e){
-		if(onSelected){
-			cnvsManager.moveNode(e.getX(),e.getY());
-		}
-	}
-	
-	@FXML
-	private void mouseClick(MouseEvent e){
 		if(e.getButton() == MouseButton.PRIMARY){
 			int press = e.getClickCount();
-			if(cnvsManager.onNode(e.getX(),e.getY()) >= 0){
+			if(cnvsManager.onNode(e.getX(),e.getY(),true) >= 0){
 				cHeditor.setSelected(cnvsManager.getSelected());
 				updateEditor(cHeditor.getSelected());
 			}else if( press > 1){
@@ -96,12 +73,41 @@ public class Editor {
 				cHeditor.setSelected(-1);
 				cnvsManager.resetSelected();
 			}
+			
+			switch(cnvsManager.tools(e.getX(),e.getY())){
+			case 0:
+				cnvsManager.createNode(e.getX(),e.getY(), cHeditor.createText());
+				break;
+			}
+			if(cnvsManager.onSelected(e.getX(),e.getY())){
+				onSelected = true;
+			}
+			if(cnvsManager.onConnect(e.getX(),e.getY())){
+				onConnect = true;
+			}
 		}
 	}
 	
 	@FXML
-	private void addChild(){
-		cnvsManager.addChild(cHeditor.addChild(cnvsManager.getSelected()));
+	private void onRelease(MouseEvent e){
+		onSelected = false;
+		if(onConnect){
+			cnvsManager.connect(cHeditor.connect(
+					cnvsManager.onNode(e.getX(),e.getY(),false)));
+			onConnect = false;	
+		}
+		System.out.println(onConnect);
+		
+	}
+	
+	@FXML
+	private void follow(MouseEvent e){
+		if(onSelected){
+			cnvsManager.moveNode(e.getX(),e.getY());
+		}
+		if(onConnect){
+			cnvsManager.drawConnect(e.getX(),e.getY());
+		}
 	}
 	
 	private void updateEditor(Text selected) {
@@ -125,6 +131,7 @@ public class Editor {
 		this.cHeditor = cHeditor;
 		cnvsManager = canvasManager;
 		onSelected = false;
+		onConnect = false;
 		cnvsManager.setCanvas(canvas,cHeditor.currentKey());
 		
 		canvasPane.heightProperty().addListener(new ChangeListener<Number>(){

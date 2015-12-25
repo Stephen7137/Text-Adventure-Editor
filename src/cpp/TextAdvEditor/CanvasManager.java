@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 
+import cpp.TextAdvEditor.Model.SimpPoint2D;
 import cpp.TextAdvEditor.Model.Text;
 import cpp.TextAdvEditor.Model.TreePoint;
 import javafx.geometry.Point2D;
@@ -25,7 +26,9 @@ public class CanvasManager {
 	private Canvas canvas;
 	private int selectedID;
 	private TreePoint selected;
-	private Point2D node;
+	private Point2D ToolText;
+	private SimpPoint2D connect;
+	private final int offset = 22;
 	private int toolW;
 	private int toolH;
 	
@@ -36,29 +39,23 @@ public class CanvasManager {
 	public void setCanvas(Canvas canvas, int key){
 		diameter = radious*2;
 		lookup = new ArrayList<TreePoint>();
-		selectedID = -1;
-		selected = null;
 		this.canvas = canvas;
 		gc = canvas.getGraphicsContext2D();
-		toolW = diameter + 8;
-		toolH = diameter + 8;
-		node = new Point2D(toolW/2 + 2, toolH - radious - 2);
-		update();
+		toolW = toolH = diameter + 8;
+		ToolText = new Point2D(toolW/2 + 2, toolH - radious - 2);
+		resetSelected();
 	}
 	
 	public void update(){
 		gc.setFill(background);
 		gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-		gc.setFill(Color.BLUE);
-		gc.setStroke(Color.GREEN);
-		gc.setLineWidth(5);
 		draw();
 		gc.setFill(background);
 		gc.setStroke(Color.BLACK);
 		gc.fillRect(2, 2, toolW, toolH);
 		gc.strokeRect(2, 2, toolW, toolH);
 		gc.setFill(Color.BLUE);
-		gc.fillOval(node.getX() - radious, node.getY() - radious, diameter, diameter);
+		gc.fillOval(ToolText.getX() - radious, ToolText.getY() - radious, diameter, diameter);
 	}
 	
 	private boolean checkArea(double x, double y){
@@ -69,17 +66,25 @@ public class CanvasManager {
 	}
 	
 	private void draw(){
+		gc.setFill(Color.BLUE);
+		gc.setLineWidth(2);
+		
 		for(int i = 0; i < lookup.size(); i++){
 			TreePoint point = lookup.get(i);
 			gc.fillOval(point.getX() - radious, point.getY() - radious,
 					diameter, diameter);
+			gc.setStroke(Color.BLACK);
+			gc.strokeOval(point.getX() - radious, point.getY() - radious,
+					diameter, diameter);
 			drawChild(lookup.get(i), Color.GREEN);
 		}
 		if(selected != null){
+			gc.setStroke(Color.ORANGE);
+			gc.setLineWidth(5);
 			gc.strokeOval(selected.getX()-radious, selected.getY()-radious,
 					diameter, diameter);
 			gc.setFill(Color.BLACK);
-			gc.fillOval(selected.getX()- radious - distance, selected.getY()- radious - distance, distance, distance);
+			gc.fillOval(connect.getX(), connect.getY(), distance, distance);
 			drawChild(selected, Color.RED);
 		}
 	}
@@ -93,13 +98,14 @@ public class CanvasManager {
 		}	
 	}
 	
-	public int onNode(double x, double y) {
+	public int onNode(double x, double y, boolean selected) {
 		for(int i = 0; i < lookup.size(); i++){
 			if(lookup.get(i).distance(x, y) <= radious){
-				selected = lookup.get(i);
-				selectedID = selected.getID();
+				if(selected){
+					setSelected(lookup.get(i));
+				}
 				update();
-				return selectedID;
+				return lookup.get(i).getID();
 			}
 		}
 		return -1;
@@ -139,14 +145,13 @@ public class CanvasManager {
 	public void load(int chapterID, ArrayList<TreePoint> lookup) {
 		this.chapterID = chapterID;
 		this.lookup = lookup;
-		selected = null;
-		selectedID = -1;
-		update();
+		resetSelected();
 	}
 
 	public void resetSelected() {
 		selectedID = -1;
 		selected = null;
+		connect = null;
 		update();
 	}
 
@@ -157,6 +162,7 @@ public class CanvasManager {
 	public void moveNode(double x, double y) {
 		if(selected != null){
 			selected.setXY(x, y);
+			connect.setPoint(x - offset, y - offset);
 			update();
 		}
 	}
@@ -168,14 +174,52 @@ public class CanvasManager {
 
 	public int tools(double x, double y) {
 		if(x >= 0 && x <= toolW && y >=0 && y <= toolH ){
-			if(node.distance(x,y) <= radious) return 0;
+			if(ToolText.distance(x,y) <= radious) return 0;
 		}
 		return -1;
+	}
+	
+	public boolean onConnect(double x, double y){
+		if(connect == null) return false;
+		return connect.distance(x,y) <= distance;
+		
 	}
 
 	public void createNode(double x, double y, int createNode) {
 		TreePoint cNode = new TreePoint(x,y,createNode);
 		lookup.add(cNode);
-		selected = cNode;
+		setSelected(cNode);
+	}
+	
+	private void setSelected(TreePoint node){
+		selected = node;
+		selectedID = selected.getID();
+		connect = new SimpPoint2D(selected.getX() - offset, selected.getY() - offset);
+	}
+
+	public void drawConnect(double x, double y) {
+		update();
+		gc.setStroke(Color.GREEN);
+		gc.strokeLine(selected.getX(), selected.getY(), x, y);
+		draw();
+		//double lineW = gc.getLineWidth()/4;
+		//gc.strokeOval(x - lineW, y - lineW, lineW, lineW);
+		//gc.strokeOval(selected.getX() - lineW, selected.getY() - lineW, lineW, lineW);
+	}
+
+	public void connect(int ID) {
+		if(selected != null){
+			TreePoint node = searchTree(ID);
+			node.addParent(selected);
+			selected.addChild(node);
+		}
+		update();
+	}
+
+	private TreePoint searchTree(int ID) {
+		for(int i = 0; i < lookup.size(); i++){
+			if(lookup.get(i).getID() == ID) return lookup.get(i);
+		}
+		return null;
 	}
 }

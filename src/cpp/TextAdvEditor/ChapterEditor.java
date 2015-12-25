@@ -35,8 +35,8 @@ public class ChapterEditor{
 		updateText();
 	}
 		
-	public void connect(){
-		//TODO
+	public int connect(int id){
+		return addChild(searchTree(id));
 	}
 		
 	public void updateText(){
@@ -106,27 +106,25 @@ public class ChapterEditor{
 		return currentNode.getKey();
 	}
 	
-	public int addChild(int i){
-		if(i >= 0){
-			Text pText = searchTree(i);
-			Text nwText = new Text(getKey());
-			int childNum = pText.getChildSize();
-			nwText.addParent(pText);
+	public int addChild(Text text){
+		if(text != null){
+			int childNum = selectedNode.getChildSize();
+			text.addParent(selectedNode);
 			if( childNum == 0){
-				pText.addChild(nwText);
-				tree.add(nwText);
-				}else if(childNum == 1){
-				Text txtChild = pText.popChild(0);
+				selectedNode.addChild(text);
+				tree.add(text);
+			}else if(childNum == 1){
+				Text txtChild = selectedNode.popChild(0);
 				tree.remove(txtChild);
-				pText.addChild(new Option(txtChild));
-				pText.addChild(new Option(nwText));
-				tree.add(pText.getChild(0));
-				tree.add(pText.getChild(1));
+				selectedNode.addChild(new Option(txtChild));
+				selectedNode.addChild(new Option(text));
+				tree.add(selectedNode.getChild(0));
+				tree.add(selectedNode.getChild(1));
 			}else{
-				pText.addChild(new Option(nwText));
-				tree.add(pText.getChild(pText.getChildSize() - 1));
+				selectedNode.addChild(new Option(text));
+				tree.add(selectedNode.getChild(selectedNode.getChildSize() - 1));
 			}
-			return nwText.getKey();
+			return text.getKey();
 		}
 		return -1;
 	}
