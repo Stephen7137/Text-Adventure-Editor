@@ -75,4 +75,12 @@ public class TreePoint implements Serializable{
 	public double distance(double x, double y) {
 		return point.distance(x, y);
 	}
+
+	public void removeChild(TreePoint cNode) {
+		child.remove(cNode);
+	}
+
+	public void removeParent(TreePoint pNode) {
+		parent.remove(pNode);
+	}
 }

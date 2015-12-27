@@ -26,7 +26,7 @@ public class CanvasManager {
 	private Canvas canvas;
 	private int selectedID;
 	private TreePoint selected;
-	private Point2D ToolText;
+	private Point2D toolText;
 	private SimpPoint2D connect;
 	private final int offset = 22;
 	private int toolW;
@@ -42,7 +42,7 @@ public class CanvasManager {
 		this.canvas = canvas;
 		gc = canvas.getGraphicsContext2D();
 		toolW = toolH = diameter + 8;
-		ToolText = new Point2D(toolW/2 + 2, toolH - radious - 2);
+		toolText = new Point2D(toolW/2 + 2, toolH - radious - 2);
 		resetSelected();
 	}
 	
@@ -52,10 +52,10 @@ public class CanvasManager {
 		draw();
 		gc.setFill(background);
 		gc.setStroke(Color.BLACK);
+		gc.setLineWidth(3);
 		gc.fillRect(2, 2, toolW, toolH);
 		gc.strokeRect(2, 2, toolW, toolH);
-		gc.setFill(Color.BLUE);
-		gc.fillOval(ToolText.getX() - radious, ToolText.getY() - radious, diameter, diameter);
+		drawNode(toolText.getX(), toolText.getY(), Color.BLUE);
 	}
 	
 	private boolean checkArea(double x, double y){
@@ -66,30 +66,42 @@ public class CanvasManager {
 	}
 	
 	private void draw(){
-		gc.setFill(Color.BLUE);
-		gc.setLineWidth(2);
 		
 		for(int i = 0; i < lookup.size(); i++){
-			TreePoint point = lookup.get(i);
-			gc.fillOval(point.getX() - radious, point.getY() - radious,
-					diameter, diameter);
-			gc.setStroke(Color.BLACK);
-			gc.strokeOval(point.getX() - radious, point.getY() - radious,
-					diameter, diameter);
-			drawChild(lookup.get(i), Color.GREEN);
+			drawChild(lookup.get(i), Color.BLACK);
 		}
+		
+		if(selected != null){
+			drawChild(selected, Color.YELLOW);
+		}
+		
+		for(int i = 0; i < lookup.size(); i++){
+			drawNode(lookup.get(i).getX(), lookup.get(i).getY(), Color.BLUE);
+		}
+		
 		if(selected != null){
 			gc.setStroke(Color.ORANGE);
 			gc.setLineWidth(5);
-			gc.strokeOval(selected.getX()-radious, selected.getY()-radious,
+			gc.strokeOval(selected.getX() - radious, selected.getY() - radious,
 					diameter, diameter);
 			gc.setFill(Color.BLACK);
 			gc.fillOval(connect.getX(), connect.getY(), distance, distance);
-			drawChild(selected, Color.RED);
 		}
 	}
 	
+	private void drawNode(double x, double y, Paint color){
+		gc.setLineWidth(5);
+		gc.setFill(color);
+		gc.fillOval(x - radious, y - radious,
+				diameter, diameter);
+		gc.setLineWidth(2);
+		gc.setStroke(Color.BLACK);
+		gc.strokeOval(x - radious, y - radious,
+				diameter, diameter);
+	}
+	
 	private void drawChild(TreePoint point, Paint color){
+		gc.setLineWidth(5);
 		gc.setStroke(color);
 		for(int j = 0; j < point.childsize(); j++){
 			TreePoint point1 = point.getChild(j);
@@ -174,7 +186,7 @@ public class CanvasManager {
 
 	public int tools(double x, double y) {
 		if(x >= 0 && x <= toolW && y >=0 && y <= toolH ){
-			if(ToolText.distance(x,y) <= radious) return 0;
+			if(toolText.distance(x,y) <= radious) return 0;
 		}
 		return -1;
 	}
@@ -197,21 +209,27 @@ public class CanvasManager {
 		connect = new SimpPoint2D(selected.getX() - offset, selected.getY() - offset);
 	}
 
-	public void drawConnect(double x, double y) {
+	public void drawConnect(double x, double y, boolean delete) {
 		update();
-		gc.setStroke(Color.GREEN);
+		gc.setLineWidth(5);
+		if(delete){
+			gc.setStroke(Color.RED);
+		}else{
+			gc.setStroke(Color.GREEN);	
+		}
 		gc.strokeLine(selected.getX(), selected.getY(), x, y);
-		draw();
 		//double lineW = gc.getLineWidth()/4;
 		//gc.strokeOval(x - lineW, y - lineW, lineW, lineW);
 		//gc.strokeOval(selected.getX() - lineW, selected.getY() - lineW, lineW, lineW);
 	}
 
 	public void connect(int ID) {
-		if(selected != null){
-			TreePoint node = searchTree(ID);
-			node.addParent(selected);
-			selected.addChild(node);
+		if(ID >= 0){
+			if(selected != null){
+				TreePoint node = searchTree(ID);
+				node.addParent(selected);
+				selected.addChild(node);
+			}
 		}
 		update();
 	}
@@ -221,5 +239,12 @@ public class CanvasManager {
 			if(lookup.get(i).getID() == ID) return lookup.get(i);
 		}
 		return null;
+	}
+
+	public void disconnect(int ID) {
+		TreePoint point = searchTree(ID);
+		selected.removeChild(point);
+		point.removeParent(selected);
+		update();
 	}
 }

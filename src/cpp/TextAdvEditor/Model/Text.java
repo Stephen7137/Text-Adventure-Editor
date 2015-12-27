@@ -76,4 +76,16 @@ public class Text implements Serializable{
 	public Text popChild(int i) {
 		return child.remove(i);
 	}
+	
+	public boolean isChild(Text child){
+		return this.child.contains(child);
+	}
+
+	public void removeChild(Text child) {
+		this.child.remove(child);
+	}
+
+	public void removeParent(Text parent) {
+		this.parent.remove(parent);
+	}
 }

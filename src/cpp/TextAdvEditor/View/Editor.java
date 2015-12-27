@@ -92,12 +92,16 @@ public class Editor {
 	private void onRelease(MouseEvent e){
 		onSelected = false;
 		if(onConnect){
-			cnvsManager.connect(cHeditor.connect(
+			if(cHeditor.isChild(cnvsManager.onNode(e.getX(),e.getY(),false))){
+				cnvsManager.disconnect(cHeditor.disconnect(
+						cnvsManager.onNode(e.getX(),e.getY(),false)));
+			}else{
+				cnvsManager.connect(cHeditor.connect(
 					cnvsManager.onNode(e.getX(),e.getY(),false)));
+			}
+			
 			onConnect = false;	
 		}
-		System.out.println(onConnect);
-		
 	}
 	
 	@FXML
@@ -106,7 +110,8 @@ public class Editor {
 			cnvsManager.moveNode(e.getX(),e.getY());
 		}
 		if(onConnect){
-			cnvsManager.drawConnect(e.getX(),e.getY());
+			cnvsManager.drawConnect(e.getX(),e.getY(), cHeditor.isChild(
+					cnvsManager.onNode(e.getX(),e.getY(),false)));
 		}
 	}
 	

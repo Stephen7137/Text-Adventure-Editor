@@ -71,8 +71,11 @@ public class ChapterEditor{
 		}
 	}
 	
-	public void disconnect(){
-		//TODO
+	public int disconnect(int key){
+		Text node = searchTree(key);
+		selectedNode.removeChild(node);
+		node.removeParent(selectedNode);
+		return node.getKey();
 	}
 	
 	public void addBookmark(){
@@ -94,6 +97,7 @@ public class ChapterEditor{
 		noParent.add(newText);
 		noChild.add(newText);
 		tree.add(newText);
+		selectedNode = newText;
 		return newText.getKey();
 	}
 	
@@ -112,18 +116,23 @@ public class ChapterEditor{
 			text.addParent(selectedNode);
 			if( childNum == 0){
 				selectedNode.addChild(text);
-				tree.add(text);
-			}else if(childNum == 1){
-				Text txtChild = selectedNode.popChild(0);
-				tree.remove(txtChild);
-				selectedNode.addChild(new Option(txtChild));
-				selectedNode.addChild(new Option(text));
-				tree.add(selectedNode.getChild(0));
-				tree.add(selectedNode.getChild(1));
 			}else{
-				selectedNode.addChild(new Option(text));
-				tree.add(selectedNode.getChild(selectedNode.getChildSize() - 1));
+				tree.remove(text);
+				Option option = new Option(text);
+				tree.add(option);
+				if(childNum == 1){
+					Text txtChild = selectedNode.popChild(0);
+					tree.remove(txtChild);
+					Option firstChild = new Option(txtChild);
+					selectedNode.addChild(firstChild);
+					selectedNode.addChild(option);
+					tree.add(firstChild);
+				}else{
+					selectedNode.addChild(option);
+				}
+				
 			}
+			
 			return text.getKey();
 		}
 		return -1;
@@ -262,5 +271,10 @@ public class ChapterEditor{
 
 	public void loadTree(ArrayList<Text> tree) {
 		this.tree = tree;
+	}
+
+	public boolean isChild(int key) {
+		Text text = searchTree(key);
+		return selectedNode.isChild(text);
 	}
 }

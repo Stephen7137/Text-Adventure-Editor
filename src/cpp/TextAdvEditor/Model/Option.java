@@ -13,13 +13,20 @@ public class Option extends Text {
 
 	public Option(Text txtChild) {
 		super(txtChild.getKey());
+		parent = txtChild.parent;
 		child = txtChild.child;
 		title = txtChild.text;
 		text = txtChild.text;
-		for(int i = 0; i < txtChild.parent.size(); i++){
-			txtChild.parent.get(i).parent.remove(txtChild);
-			txtChild.parent.get(i).parent.add(this);
+		for(int i = 0; i < parent.size(); i++){
+			parent.get(i).child.remove(txtChild);
+			parent.get(i).child.add(this);
 		}
+		
+		for(int i = 0; i < child.size(); i++){
+			child.get(i).parent.remove(txtChild);
+			child.get(i).parent.add(this);
+		}
+		
 		txtChild.child = null;
 		txtChild.parent = null;
 	}
