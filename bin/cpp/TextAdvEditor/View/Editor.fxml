@@ -20,7 +20,7 @@
             <TextField fx:id="title" layoutY="40.0" prefHeight="25.0" prefWidth="250.0" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="6.0" AnchorPane.topAnchor="40.0" />
             <Text layoutX="3.0" layoutY="78.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" AnchorPane.leftAnchor="6.0" AnchorPane.topAnchor="65.0" />
             <TextArea fx:id="text" layoutX="9.0" layoutY="82.0" prefHeight="204.0" prefWidth="240.0" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="6.0" AnchorPane.topAnchor="82.0" />
-            <ScrollPane layoutX="6.0" layoutY="291.0" prefHeight="134.0" prefWidth="240.0" AnchorPane.bottomAnchor="36.0" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="6.0">
+            <ScrollPane layoutX="6.0" layoutY="291.0" prefHeight="134.0" prefWidth="240.0" AnchorPane.bottomAnchor="36.0" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="6.0" AnchorPane.topAnchor="291.0">
               <content>
                 <AnchorPane fx:id="option" minHeight="0.0" minWidth="0.0" prefHeight="132.0" prefWidth="236.0" />
               </content>

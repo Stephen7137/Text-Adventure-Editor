@@ -112,27 +112,10 @@ public class ChapterEditor{
 	
 	public int addChild(Text text){
 		if(text != null){
-			int childNum = selectedNode.getChildSize();
-			text.addParent(selectedNode);
-			if( childNum == 0){
-				selectedNode.addChild(text);
-			}else{
-				tree.remove(text);
-				Option option = new Option(text);
-				tree.add(option);
-				if(childNum == 1){
-					Text txtChild = selectedNode.popChild(0);
-					tree.remove(txtChild);
-					Option firstChild = new Option(txtChild);
-					selectedNode.addChild(firstChild);
-					selectedNode.addChild(option);
-					tree.add(firstChild);
-				}else{
-					selectedNode.addChild(option);
-				}
-				
-			}
 			
+			text.addParent(selectedNode);
+			selectedNode.addChild(text);
+						
 			return text.getKey();
 		}
 		return -1;

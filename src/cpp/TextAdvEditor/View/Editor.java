@@ -122,8 +122,8 @@ public class Editor {
 			title.setText(selected.getTitle());
 			text.setText(selected.getText());
 			if(selected.getChildSize()>1){
-				ArrayList<Text> children = selected.getChild();
-				for(int i = 0; i < children.size(); i++){
+				String[] children = selected.getChldOText();
+				for(int i = 0; i < children.length; i++){
 					
 				}
 			}else{

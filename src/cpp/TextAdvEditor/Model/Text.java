@@ -9,12 +9,13 @@ public class Text implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 6064370901268149364L;
-	protected String title;
-	protected String text;
-	protected ArrayList<Text> parent;
-	protected ArrayList<Text> child;
+	private String title;
+	private String text;
+	private ArrayList<Text> parent;
+	private ArrayList<Text> child;
 	private int key;
-	
+	private String optText;
+		
 	public Text(int key){
 		this.key = key;
 		parent = new ArrayList<Text>();
@@ -39,6 +40,14 @@ public class Text implements Serializable{
 	
 	public String getText(){
 		return text;
+	}
+
+	public void setOptText(String optText){
+		this.optText = optText;
+	}
+	
+	public String getOptText(){
+		return optText;
 	}
 	
 	public void setParent(ArrayList<Text> parent){
@@ -87,5 +96,13 @@ public class Text implements Serializable{
 
 	public void removeParent(Text parent) {
 		this.parent.remove(parent);
+	}
+
+	public String[] getChldOText() {
+		String[] oText = new String[child.size()];
+		for(int i = 0; i < oText.length; i++){
+			oText[i] = child.get(i).getOptText();
+		}
+		return null;
 	}
 }
