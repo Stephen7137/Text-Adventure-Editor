@@ -24,23 +24,12 @@ public class ProjectManager {
 	SaveProject save;
 	FileChooser fileChooser;
 	File file;
+	Stage primaryStage;
 	
-	/**
-	 * Creates the project {@link #editor} and sets the location and file type of the
-	 * {@link #fileChooser}. The starting location for {@link #fileChooser} is users
-	 * home file.
-	 */
-	public ProjectManager(Story story, CanvasManager cnvsManager, ChapterEditor editor){
-		this.editor = editor;
-		this.cnvsManager = cnvsManager;
-		save = new SaveProject(story);
-		save.addManagers(cnvsManager, editor);
-		fileChooser = new FileChooser();
-		fileChooser.getExtensionFilters().add(
-				new FileChooser.ExtensionFilter("Project file", "*.project"));
-		//fileChooser.setInitialDirectory(JFileChooser());
+	public ProjectManager(Stage primaryStage) {
+		this.primaryStage = primaryStage;
 	}
-	
+
 	/**
 	 * Checks to see if {@link #file} is null, if not then calls {@link #saveChapter()}
 	 * If file is not null then {@link #editor} has been saved before or has been
@@ -63,7 +52,7 @@ public class ProjectManager {
 	 * to {@link #file} for later uses.
 	 */
 	public void saveAs(){
-		file = fileChooser.showSaveDialog(new Stage());
+		file = fileChooser.showSaveDialog(primaryStage);
         if (file != null) {
         	saveProject();
         }
@@ -122,5 +111,17 @@ public class ProjectManager {
 	
 	public ChapterEditor getChapter(){
 		return editor;
+	}
+
+	public void setStory(Story story, CanvasManager cnvsManager,
+			ChapterEditor editor) {
+		this.editor = editor;
+		this.cnvsManager = cnvsManager;
+		save = new SaveProject(story);
+		save.addManagers(cnvsManager, editor);
+		fileChooser = new FileChooser();
+		fileChooser.getExtensionFilters().add(
+				new FileChooser.ExtensionFilter("Project file", "*.project"));
+		fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
 	}
 }

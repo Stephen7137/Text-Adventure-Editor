@@ -247,4 +247,23 @@ public class CanvasManager {
 		point.removeParent(selected);
 		update();
 	}
+
+	public void delete() {
+		if(selected != null){
+			ArrayList<TreePoint> child = selected.getChild();
+			for(int i = 0; i < child.size(); i++){
+				child.get(i).removeParent(selected);
+			}
+			ArrayList<TreePoint> parent = selected.getChild();
+			for(int i = 0; i < parent.size(); i++){
+				parent.get(i).removeChild(selected);
+			}
+			selected.delete();
+			lookup.remove(selected);
+			selected = null;
+			selectedID = -1;
+			
+			update();
+		}
+	}
 }

@@ -18,12 +18,14 @@ public class ChapterEditor{
 	private ArrayList<Text> tree;
 	private Text currentNode;
 	private Text selectedNode;
+	private Stack memory;
 	Random keyGen;
 	
 	private StringProperty story;
 	
 	public ChapterEditor(int chapterID, ArrayList<Text> tree){
 		this.chapterID = chapterID;
+		memory = new Stack(20);
 		keyGen = new Random();
 		this.tree = tree;
 		currentNode = null;
@@ -58,11 +60,29 @@ public class ChapterEditor{
 	}
 	
 	public void delete(){
-		deleteFromList(selectedNode, selectedNode.getChild());
-		deleteFromList(selectedNode, selectedNode.getParent());
+		
+		ArrayList<Text> child = selectedNode.getChild();
+		for(int i = 0; i < child.size(); i++){
+			child.get(i).removeParent(selectedNode);
+			if(child.get(i).getParentSize() == 0){
+				noParent.add(child.get(i));
+			}
+		}
+		
+		ArrayList<Text> parent = selectedNode.getChild();
+		for(int i = 0; i < parent.size(); i++){
+			parent.get(i).removeChild(selectedNode);
+			if(parent.get(i).getChildSize() == 0){
+				noChild.add(parent.get(i));
+			}
+		}		
 		
 		selectedNode.setChild(null);
 		selectedNode.setParent(null);
+		
+		tree.remove(selectedNode);
+		selectedNode = null;
+		System.out.println(tree.size());
 	}
 	
 	private void deleteFromList(Text node, ArrayList<Text> list){
@@ -86,6 +106,18 @@ public class ChapterEditor{
 		if(input >= currentNode.getChildSize())return false;
 		
 		currentNode = currentNode.getChild(input);
+		memory.push(currentNode);
+		updateText();
+		
+		return true;
+	}
+	
+	public boolean back(){
+		
+		Text back = memory.pop();
+		if(back != null){
+			currentNode = back;
+		}
 		updateText();
 		
 		return true;
@@ -259,5 +291,53 @@ public class ChapterEditor{
 	public boolean isChild(int key) {
 		Text text = searchTree(key);
 		return selectedNode.isChild(text);
+	}
+	
+	class Stack{
+		
+		Text[] stack;
+		int size;
+		int max;
+		int pointer;
+		
+		public Stack(int max){
+			stack = new Text[max];
+			this.max = max;
+			size = 0;
+			pointer = 0;
+		}
+		
+		public void push(Text text){
+			pointer = (pointer + 1)%stack.length;
+			stack[pointer] = text;
+			if(size < max){
+				size++;
+			}else{
+				size = max;
+			}
+		}
+		
+		public Text pop(){
+			Text pop = stack[pointer];
+			stack[pointer] = null;
+			if(pointer == 0){
+				pointer = max - 1;
+			}else{
+				pointer--;
+			}
+			if(size > 0){
+				size--;
+			}else{
+				size = 0;
+			}
+			return pop;
+		}
+	}
+
+	public boolean isEmpty() {
+		if(!selectedNode.getTitle().equals("")) return false;
+		if(!selectedNode.getText().equals("")) return false;
+		if(!selectedNode.getOptText().equals("")) return false;
+		return true;
 	}
 }

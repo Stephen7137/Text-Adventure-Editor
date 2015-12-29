@@ -1,6 +1,7 @@
 package cpp.TextAdvEditor.View;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 import cpp.TextAdvEditor.CanvasManager;
 import cpp.TextAdvEditor.ChapterEditor;
@@ -9,6 +10,9 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -59,6 +63,20 @@ public class Editor {
 		if(cHeditor.isCurrent()){
 				cHeditor.updateText();
 			}
+	}
+	
+	@FXML
+	private void delete(){
+		boolean delete = true;
+		if(!cHeditor.isEmpty()){
+			if(!deteleError()){
+				delete = false;
+			}
+		}
+		if(delete){
+			cHeditor.delete();
+			cnvsManager.delete();
+		}
 	}
 	
 	@FXML
@@ -113,6 +131,22 @@ public class Editor {
 			cnvsManager.drawConnect(e.getX(),e.getY(), cHeditor.isChild(
 					cnvsManager.onNode(e.getX(),e.getY(),false)));
 		}
+	}
+	
+	private boolean deteleError(){
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Delete Node");
+		alert.setHeaderText(null);
+		alert.setContentText("Node contains Text!\nAre you sure you want to delte node?");
+		
+		ButtonType buttonYes = new ButtonType("Yes");
+		ButtonType buttonNo = new ButtonType("No");
+		
+		alert.getButtonTypes().setAll(buttonYes, buttonNo);
+		
+		Optional<ButtonType> results = alert.showAndWait();
+		if(results.get() == buttonYes) return true;
+		return false;
 	}
 	
 	private void updateEditor(Text selected) {

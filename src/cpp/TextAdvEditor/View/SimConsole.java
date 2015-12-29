@@ -38,7 +38,7 @@ public class SimConsole {
 	
 	@FXML
 	private void back(){
-		//cHeditor.back();
+		cHeditor.back();
 	}
 
 	public void setStory(StringProperty textArea) {

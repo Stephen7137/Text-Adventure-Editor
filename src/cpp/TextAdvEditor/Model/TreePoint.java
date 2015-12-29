@@ -83,4 +83,9 @@ public class TreePoint implements Serializable{
 	public void removeParent(TreePoint pNode) {
 		parent.remove(pNode);
 	}
+
+	public void delete() {
+		child = null;
+		parent = null;		
+	}
 }

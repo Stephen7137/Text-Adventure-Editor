@@ -11,12 +11,16 @@ public class Text implements Serializable{
 	private static final long serialVersionUID = 6064370901268149364L;
 	private String title;
 	private String text;
+	private String optText;
+	
 	private ArrayList<Text> parent;
 	private ArrayList<Text> child;
 	private int key;
-	private String optText;
 		
 	public Text(int key){
+		title = "";
+		text = "";
+		optText = "";
 		this.key = key;
 		parent = new ArrayList<Text>();
 		child = new ArrayList<Text>();
@@ -72,6 +76,10 @@ public class Text implements Serializable{
 	
 	public int getChildSize(){
 		return child.size();
+	}
+	
+	public int getParentSize(){
+		return parent.size();
 	}
 	
 	public void addChild(Text child){
