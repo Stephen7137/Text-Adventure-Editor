@@ -23,34 +23,33 @@ License: Check LICENCE
 --------------------------------------------------------------------------------
 
 Planned Features:
--add interactive scene to move nodes around in the Story Tree tab
 -add the ability to add nodes to bookmark a node in a Chapter
-
-Known Bugs:
--save does not save full chapter
--starting node does not work
+-export to as stand alone or need player.
 
 --------------------------------------------------------------------------------
 
 Instruction:
-There are 4 tabs Overview, Story Tree, Selected Node, and scene.
+There are 2 tabs Console and Overview.
 
-Overview tab is a simulation of how the story will look as the story plays out 
+Console tab is a simulation of how the story will look as the story plays out 
 in the console. There is a text box for input for the option input, and a 
 enter button to input the users choose or proceed to the next part of the story.
 
-Story Tree tab shows how all the nodes are connected and allows to manipulated 
-the nodes and their connection between each other. This tab also allows to 
-create and delete nodes from the tree, allowing to shrink and grow the story.
-
-Select Node tab is a console view of a current node and the child/children. 
-The main use of this tab is to make sure option nodes display their children 
-correctly and are connected properly so there is no miss alignment with the 
-story's options.
-
-Scene tab TBA
+Overview tab allow to create Nodes and connect them together forming the story
+tree. The text editor on the side allows to create and edit the story of each
+Node. If the story needs to be changed, Nodes are also able to be disconnected
+and delete.
 
 --------------------------------------------------------------------------------
+TA Editor Alpha 1.2
+-add Nodes to be connected
+-add Nodes to be disconnected
+-add Nodes to be Deleted
+-Changed overall UI
+	-Lines are drawn to be under nodes
+	-Lines connected to Selected Node are Highlighted
+	-Add connection point to Selected Node
+
 TA Editor Alpha 1.1
 - add edit node support
 - add overview of nodes
