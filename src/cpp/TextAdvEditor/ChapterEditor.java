@@ -22,6 +22,7 @@ public class ChapterEditor{
 	Random keyGen;
 	
 	private StringProperty story;
+	private Text start;
 	
 	public ChapterEditor(int chapterID, ArrayList<Text> tree){
 		this.chapterID = chapterID;
@@ -51,14 +52,6 @@ public class ChapterEditor{
 		return story;
 	}
 	
-	public void removeChild(){
-		//TODO
-	}
-	
-	public void removeParent(){
-		//TODO
-	}
-	
 	public void delete(){
 		
 		ArrayList<Text> child = selectedNode.getChild();
@@ -85,21 +78,25 @@ public class ChapterEditor{
 		System.out.println(tree.size());
 	}
 	
-	private void deleteFromList(Text node, ArrayList<Text> list){
-		for(int i = 0; i < list.size(); i++){
-			//TODO
-		}
-	}
-	
 	public int disconnect(int key){
 		Text node = searchTree(key);
 		selectedNode.removeChild(node);
+		if(selectedNode.getChildSize() == 0 && !noChild.contains(selectedNode)){
+			noChild.add(selectedNode);
+		}
 		node.removeParent(selectedNode);
+		if(node.getParentSize() == 0 && !noParent.contains(node)){
+			noParent.add(node);
+		}
 		return node.getKey();
 	}
 	
 	public void addBookmark(){
 		bookmark.add(selectedNode);
+	}
+	
+	public void removeBookmark(){
+		bookmark.remove(selectedNode);
 	}
 		
 	public boolean next(int input){
@@ -146,8 +143,15 @@ public class ChapterEditor{
 		if(text != null){
 			
 			text.addParent(selectedNode);
+			if(noParent.contains(text)){
+				noParent.remove(text);
+			}
+			
 			selectedNode.addChild(text);
-						
+			if(noChild.contains(selectedNode)){
+				noChild.remove(selectedNode);
+			}	
+			
 			return text.getKey();
 		}
 		return -1;
@@ -162,65 +166,28 @@ public class ChapterEditor{
 		return null;
 	}
 	
-	public ObservableList<String> getBookMark() {
+	public ArrayList<NodeText> getBookMark() {
 		return createList(bookmark);
 	}
 
-	public ObservableList<String> getLooseNode() {
-		return createList(noParent);
-	}
-
-	public ObservableList<String> getunfinishedNode() {
+	public ArrayList<NodeText> getNoChildNode() {
 		return createList(noChild);
 	}
+
+	public ArrayList<NodeText> getNoParentNode() {
+		return createList(noParent);
+	}
 	
-	private ObservableList<String> createList(ArrayList<Text> list){
-		ObservableList<String> options = FXCollections.observableArrayList();
-		for(int i = 0; i < list.size(); i++){
-			options.add(list.get(i).getTitle());
+	public ArrayList<NodeText> getAllNode() {
+		return createList(tree);
+	}
+	
+	private ArrayList<NodeText> createList(ArrayList<Text> list){
+		ArrayList<NodeText> textList = new ArrayList<NodeText>();
+		for(Text text : list){
+			textList.add(new NodeText(text.getTitle(),text.getKey()));
 		}
-		return options;
-	}
-	
-	public ObservableList<String> searchBookMark(String search) {
-		return searchList(bookmark,search);
-	}
-
-	public ObservableList<String> searchLooseNode(String search) {
-		return searchList(noParent,search);
-	}
-
-	public ObservableList<String> searchOpenNode(String search) {
-		return searchList(noChild,search);
-	}
-	
-	private ObservableList<String> searchList(ArrayList<Text> list, String search){
-		ObservableList<String> options = FXCollections.observableArrayList();
-		for(int i = 0; i < list.size(); i++){
-			if(list.get(i).getTitle().toLowerCase().contains(search.toLowerCase())){
-				options.add(list.get(i).getTitle());
-			}
-		}
-		return options;
-	}
-
-	public void setBookMark(String selected) {
-		currentNode = search(bookmark,selected);
-	}
-
-	public void setLooseNode(String selected) {
-		currentNode = search(noParent,selected);
-	}
-
-	public void setOpenNode(String selected) {
-		currentNode = search(noChild,selected);
-	}
-	
-	private Text search(ArrayList<Text> list, String search){
-		for(int i = 0; i < list.size(); i++){
-			if(list.get(i).getTitle().equals(search)) return list.get(i);
-		}
-		return null;
+		return textList;
 	}
 
 	public boolean hasNodes() {
@@ -284,13 +251,49 @@ public class ChapterEditor{
 		return bookmark;
 	}
 
-	public void loadTree(ArrayList<Text> tree) {
+	public void loadTree(ArrayList<Text> tree, Text text) {
+		this.start = text;
 		this.tree = tree;
 	}
 
 	public boolean isChild(int key) {
 		Text text = searchTree(key);
 		return selectedNode.isChild(text);
+	}
+	
+	public boolean isEmpty() {
+		if(!selectedNode.getTitle().equals("")) return false;
+		if(!selectedNode.getText().equals("")) return false;
+		if(!selectedNode.getOptText().equals("")) return false;
+		return true;
+	}
+
+	public boolean currentBookmark() {
+		return bookmark.contains(selectedNode);
+	}
+
+	public boolean isNull() {
+		return selectedNode == null;
+	}
+	
+	public int getSelectedKey() {
+		if(selectedNode != null){
+			return selectedNode.getKey();
+		}
+		return -1;
+	}
+	
+	public int createStart(){
+		start = searchTree(createText());
+		return start.getKey();
+	}
+	
+	public void setStart() {
+		start = selectedNode;
+	}
+	
+	public Text getStart() {
+		return start;
 	}
 	
 	class Stack{
@@ -334,10 +337,8 @@ public class ChapterEditor{
 		}
 	}
 
-	public boolean isEmpty() {
-		if(!selectedNode.getTitle().equals("")) return false;
-		if(!selectedNode.getText().equals("")) return false;
-		if(!selectedNode.getOptText().equals("")) return false;
-		return true;
+	public boolean validate() {
+		return ((noParent.size()==1 && noParent.contains(start)) 
+				|| (noParent.size()==0 && start!=null));
 	}
 }

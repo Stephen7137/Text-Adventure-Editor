@@ -11,6 +11,7 @@ public class Chapter implements Serializable{
 	private static final long serialVersionUID = -8684899390329736855L;
 	private String chName;
 	private int ID;
+	private Text start;
 	private ArrayList<Text> tree;
 	
 	public Chapter(int ID){
@@ -40,5 +41,13 @@ public class Chapter implements Serializable{
 	
 	public int numOfNode(){
 		return tree.size();
+	}
+	
+	public void setStart(Text start){
+		this.start = start;
+	}
+	
+	public Text getStart(){
+		return start;
 	}
 }

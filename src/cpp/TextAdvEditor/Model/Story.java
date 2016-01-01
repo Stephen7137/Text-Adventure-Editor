@@ -9,11 +9,13 @@ public class Story implements Serializable{
 	 */
 	private static final long serialVersionUID = 1561701032116116746L;
 	private String strName;
+	private Chapter start;
 	private ArrayList<Chapter> chapter;
 	
 	public Story(int ID){
 		chapter = new ArrayList<Chapter>();
-		chapter.add(new Chapter(ID));
+		start = new Chapter(ID);
+		this.chapter.add(start);
 	}
 	
 	public Chapter getSrtCh(){

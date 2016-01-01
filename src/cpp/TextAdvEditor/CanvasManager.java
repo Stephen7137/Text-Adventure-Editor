@@ -15,22 +15,28 @@ import javafx.scene.paint.Paint;
 
 public class CanvasManager {
 	
-	private GraphicsContext gc;
-	private int radious = 15;
-	private int diameter;
-	private int distance = 10;
-	private int nodeDist = 100;
-	private ArrayList<TreePoint> lookup;
-	private Color background = Color.WHITE;
-	private int chapterID;
-	private Canvas canvas;
-	private int selectedID;
-	private TreePoint selected;
-	private Point2D toolText;
-	private SimpPoint2D connect;
+	private final int radious = 15;
+	private final int distance = 10;
+	private final int nodeDist = 100;
 	private final int offset = 22;
+		
+	private int diameter;
 	private int toolW;
 	private int toolH;
+	
+	private Color background = Color.WHITE;
+	
+	private ArrayList<TreePoint> lookup;
+	private Canvas canvas;
+	private GraphicsContext gc;
+	
+	private int chapterID;
+	private int selectedID;
+	private TreePoint start;
+	private TreePoint selected;
+
+	private Point2D toolText;
+	private SimpPoint2D connect;
 	
 	public CanvasManager(int chID){
 		chapterID = chID;
@@ -38,6 +44,7 @@ public class CanvasManager {
 	
 	public void setCanvas(Canvas canvas, int key){
 		diameter = radious*2;
+		start = null;
 		lookup = new ArrayList<TreePoint>();
 		this.canvas = canvas;
 		gc = canvas.getGraphicsContext2D();
@@ -58,12 +65,12 @@ public class CanvasManager {
 		drawNode(toolText.getX(), toolText.getY(), Color.BLUE);
 	}
 	
-	private boolean checkArea(double x, double y){
-		for(int i = 0; i < lookup.size(); i++){
-			if(lookup.get(i).distance(x, y) <= diameter + distance) return false;
-		}
-		return true;
-	}
+//	private boolean checkArea(double x, double y){
+//		for(int i = 0; i < lookup.size(); i++){
+//			if(lookup.get(i).distance(x, y) <= diameter + distance) return false;
+//		}
+//		return true;
+//	}
 	
 	private void draw(){
 		
@@ -76,7 +83,11 @@ public class CanvasManager {
 		}
 		
 		for(int i = 0; i < lookup.size(); i++){
-			drawNode(lookup.get(i).getX(), lookup.get(i).getY(), Color.BLUE);
+			drawNode(lookup.get(i), Color.BLUE);
+		}
+		
+		if(start != null){
+			drawNode(start,Color.GREEN);
 		}
 		
 		if(selected != null){
@@ -87,6 +98,10 @@ public class CanvasManager {
 			gc.setFill(Color.BLACK);
 			gc.fillOval(connect.getX(), connect.getY(), distance, distance);
 		}
+	}
+	
+	private void drawNode(TreePoint node, Paint color){
+		drawNode(node.getX(),node.getY(),color);
 	}
 	
 	private void drawNode(double x, double y, Paint color){
@@ -203,10 +218,19 @@ public class CanvasManager {
 		setSelected(cNode);
 	}
 	
+	public void setSelected(int ID){
+		setSelected(searchTree(ID));
+		update();
+	}
+	
 	private void setSelected(TreePoint node){
 		selected = node;
-		selectedID = selected.getID();
-		connect = new SimpPoint2D(selected.getX() - offset, selected.getY() - offset);
+		if(selected == null){
+			resetSelected();
+		}else{
+			selectedID = selected.getID();
+			connect = new SimpPoint2D(selected.getX() - offset, selected.getY() - offset);
+		}	
 	}
 
 	public void drawConnect(double x, double y, boolean delete) {
@@ -265,5 +289,20 @@ public class CanvasManager {
 			
 			update();
 		}
+	}
+
+	public void StartNode(int ID) {
+		createNode(radious, canvas.getHeight()/2, ID);
+		start = searchTree(ID);
+	}
+	
+	public void setStart(){
+		start = selected;
+		update();
+	}
+	
+	public void setStart(int ID){
+		start = searchTree(ID);
+		update();
 	}
 }

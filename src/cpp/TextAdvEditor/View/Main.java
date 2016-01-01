@@ -21,18 +21,19 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			Scene scene = createScene(new ProjectManager(primaryStage));
+			Scene scene = createScene(new ProjectManager(primaryStage),primaryStage);
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("TA Editor");
 			primaryStage.setMinHeight(primaryStage.getHeight());
 			primaryStage.setMinWidth(primaryStage.getWidth());
+			primaryStage.setResizable(false);
 			primaryStage.show();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	private Scene createScene(ProjectManager projectManager) throws IOException{
+	private Scene createScene(ProjectManager projectManager, Stage primaryStage) throws IOException{
 		
 		Random ran = new Random();
 		Story story = new Story(ran.nextInt(10000));
@@ -43,9 +44,9 @@ public class Main extends Application {
 		
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(Main.class.getResource("Text Adv Editor GUI.fxml"));
-		Scene scene = new Scene(loader.load(),width,height);
+		Scene scene = new Scene(loader.load());
 		TextAdvEditorControler controller = loader.getController();
-		controller.setWriteChapter(projectManager);
+		controller.setWriteChapter(projectManager, primaryStage);
 		
 		loader = new FXMLLoader();
 		loader.setLocation(Main.class.getResource("SimConsole.fxml"));
@@ -58,6 +59,7 @@ public class Main extends Application {
 		controller.addTab("Overview", loader.load());
 		Editor editor = loader.getController();
 		editor.setCanvasManger(cnvsManager, cHeditor);
+		controller.setData(editor, cHeditor);
 		return scene;
 	}
 			

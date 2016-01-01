@@ -75,6 +75,26 @@ public class ProjectManager {
 		}
 	}
 	
+	public void export(){
+		fileChooser.getExtensionFilters().clear();
+		fileChooser.getExtensionFilters().add(
+				new FileChooser.ExtensionFilter("Story file", "*.story"));
+		File exportfile = fileChooser.showSaveDialog(primaryStage);
+		if(exportfile != null){
+			
+			try {
+				FileOutputStream fos = new FileOutputStream(exportfile);
+				ObjectOutputStream oos = new ObjectOutputStream(fos);
+				oos.writeObject(save.getStory());
+				oos.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		setFileType();
+	}
+	
 	public void load(){
 		file = fileChooser.showOpenDialog(new Stage());
 		if(file != null){
@@ -105,10 +125,6 @@ public class ProjectManager {
 		return true;
 	}
 	
-	private boolean eraseData(){
-		return false;
-	}
-	
 	public ChapterEditor getChapter(){
 		return editor;
 	}
@@ -120,8 +136,13 @@ public class ProjectManager {
 		save = new SaveProject(story);
 		save.addManagers(cnvsManager, editor);
 		fileChooser = new FileChooser();
+		setFileType();
+		fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+	}
+	
+	private void setFileType(){
+		fileChooser.getExtensionFilters().clear();
 		fileChooser.getExtensionFilters().add(
 				new FileChooser.ExtensionFilter("Project file", "*.project"));
-		fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
 	}
 }

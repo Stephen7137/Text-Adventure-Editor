@@ -3,6 +3,7 @@ package cpp.TextAdvEditor;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import cpp.TextAdvEditor.Model.Chapter;
 import cpp.TextAdvEditor.Model.Story;
 import cpp.TextAdvEditor.Model.Text;
 import cpp.TextAdvEditor.Model.TreePoint;
@@ -80,6 +81,7 @@ public class SaveProject implements Serializable{
 
 	public void update(CanvasManager cnvsManager, ChapterEditor chEditor) {
 		currentChapterID = chEditor.getCHID();
+		story.getCH(currentChapterID).setStart(chEditor.getStart());
 		searchCanvas(cnvsManager.getChapterID()).update(cnvsManager);
 		searchEditor(chEditor.getCHID()).update(chEditor);	
 	}
@@ -99,9 +101,15 @@ public class SaveProject implements Serializable{
 	}
 
 	public void loadProject(CanvasManager cnvsManager, ChapterEditor chEditor) {
-		chEditor.loadTree(story.getCH(currentChapterID).getTree());
+		Chapter chapter = story.getCH(currentChapterID);
+		chEditor.loadTree(chapter.getTree(), chapter.getStart());
 		searchEditor(currentChapterID).loadEditor(chEditor);
 		searchCanvas(currentChapterID).loadCanvas(cnvsManager);
+		cnvsManager.setStart(chEditor.getStart().getKey());
+	}
+	
+	public Story getStory(){
+		return story;
 	}
 	
 }

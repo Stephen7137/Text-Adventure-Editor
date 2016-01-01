@@ -1,6 +1,5 @@
 package cpp.TextAdvEditor.View;
 
-import java.util.ArrayList;
 import java.util.Optional;
 
 import cpp.TextAdvEditor.CanvasManager;
@@ -13,7 +12,6 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
@@ -24,9 +22,6 @@ public class Editor {
 	
 	@FXML
 	private Canvas canvas;
-	
-	@FXML
-	private ComboBox<String> bookmark;
 	
 	@FXML
 	private AnchorPane canvasPane;
@@ -48,11 +43,6 @@ public class Editor {
 	@FXML
 	private void select(){
 		
-	}
-	
-	@FXML
-	private void setCurrent(){
-		cHeditor.setCurrent(cnvsManager.getSelected());
 	}
 	
 	@FXML
@@ -83,14 +73,6 @@ public class Editor {
 	private void onPress(MouseEvent e){
 		if(e.getButton() == MouseButton.PRIMARY){
 			int press = e.getClickCount();
-			if(cnvsManager.onNode(e.getX(),e.getY(),true) >= 0){
-				cHeditor.setSelected(cnvsManager.getSelected());
-				updateEditor(cHeditor.getSelected());
-			}else if( press > 1){
-				disable();
-				cHeditor.setSelected(-1);
-				cnvsManager.resetSelected();
-			}
 			
 			switch(cnvsManager.tools(e.getX(),e.getY())){
 			case 0:
@@ -102,6 +84,15 @@ public class Editor {
 			}
 			if(cnvsManager.onConnect(e.getX(),e.getY())){
 				onConnect = true;
+			}
+			
+			if(cnvsManager.onNode(e.getX(),e.getY(),true) >= 0){
+				cHeditor.setSelected(cnvsManager.getSelected());
+				updateEditor(cHeditor.getSelected());
+			}else if( press > 1){
+				disable();
+				cHeditor.setSelected(-1);
+				cnvsManager.resetSelected();
 			}
 		}
 	}
@@ -163,7 +154,9 @@ public class Editor {
 			}else{
 				//TODO
 			}
-		}		
+		}else{
+			disable();
+		}
 	}
 
 	public void setCanvasManger(CanvasManager canvasManager, ChapterEditor cHeditor) {
@@ -196,6 +189,14 @@ public class Editor {
 		if(cnvsManager.getSelected() == -1){
 			disable();
 		}
+		
+		cnvsManager.StartNode(cHeditor.createStart());
+	}
+	
+	public void SetSelected(int ID){
+		cHeditor.setSelected(ID);
+		cnvsManager.setSelected(ID);
+		updateEditor(cHeditor.getSelected());
 	}
 	
 	private void disable(){
@@ -203,5 +204,14 @@ public class Editor {
 		text.clear();
 		title.setDisable(true);
 		text.setDisable(true);
+	}
+	
+	public void setCurrent(){
+		cHeditor.setCurrent(cnvsManager.getSelected());
+	}
+	
+	public void setStart(){
+		cnvsManager.setStart();
+		cHeditor.setStart();
 	}
 }
