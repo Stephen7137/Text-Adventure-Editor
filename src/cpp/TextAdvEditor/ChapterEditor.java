@@ -341,4 +341,36 @@ public class ChapterEditor{
 		return ((noParent.size()==1 && noParent.contains(start)) 
 				|| (noParent.size()==0 && start!=null));
 	}
+
+	public String getSelTitle() {
+		return selectedNode.getTitle();
+	}
+	
+	public void setSelTitle(String title) {
+		selectedNode.setTitle(title);
+	}
+
+	public String getSelText() {
+		return selectedNode.getText();
+	}
+	
+	public void setSelText(String text) {
+		selectedNode.setText(text);
+	}
+
+	public boolean selHasChildren() {
+		return selectedNode.getChildSize()>1;
+	}
+
+	public ArrayList<NodeText> getSelOText() {
+		ArrayList<NodeText> list = new ArrayList<NodeText>();
+		for(Text text : selectedNode.getChild()){
+			list.add(new NodeText(text.getOptText(), text.getKey()));
+		}
+		return list;
+	}
+	
+	public void setSelOText( NodeText[] oNode) {
+		selectedNode.updateChild(oNode);
+	}
 }

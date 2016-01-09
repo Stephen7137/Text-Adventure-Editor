@@ -14,7 +14,7 @@ public class Text implements Serializable{
 	private String optText;
 	
 	private ArrayList<Text> parent;
-	private ArrayList<Text> child;
+	private Text[] child;
 	private int key;
 		
 	public Text(int key){
@@ -23,7 +23,6 @@ public class Text implements Serializable{
 		optText = "";
 		this.key = key;
 		parent = new ArrayList<Text>();
-		child = new ArrayList<Text>();
 	}
 	
 	public int getKey(){
@@ -62,28 +61,33 @@ public class Text implements Serializable{
 		return parent;
 	}
 	
-	public void setChild(ArrayList<Text> child){
+	public void setChild(Text[] child){
 		this.child = child;
 	}
 	
-	public ArrayList<Text> getChild(){
+	public Text[] getChild(){
 		return child;
 	}
 	
 	public Text getChild(int i){
-		return child.get(i);
+		return child[i];
 	}
 	
 	public int getChildSize(){
-		return child.size();
+		return child.length;
 	}
 	
 	public int getParentSize(){
 		return parent.size();
 	}
 	
-	public void addChild(Text child){
-		this.child.add(child);
+	public void addChild(Text text){
+		Text[] newChild = new Text[child.length+1];
+		for(int i = 0; i < child.length; i++){
+			newChild[i] = child[i];
+		}
+		newChild[newChild.length-1] = text;
+		child = newChild;
 	}
 	
 	public void addParent(Text parent){
@@ -94,8 +98,11 @@ public class Text implements Serializable{
 		return child.remove(i);
 	}
 	
-	public boolean isChild(Text child){
-		return this.child.contains(child);
+	public boolean isChild(Text text){
+		for(int i = 0; i < child.length; i++){
+			if(child[i] == text) return true;
+		}
+		return false;
 	}
 
 	public void removeChild(Text child) {
@@ -106,11 +113,11 @@ public class Text implements Serializable{
 		this.parent.remove(parent);
 	}
 
-	public String[] getChldOText() {
-		String[] oText = new String[child.size()];
-		for(int i = 0; i < oText.length; i++){
-			oText[i] = child.get(i).getOptText();
+	public void updateChild(NodeText[] oNode) {
+		Text[] newChild = Text[child.size()];
+		for(NodeText text: oNode){
+			
 		}
-		return null;
+		child = newChild;
 	}
 }

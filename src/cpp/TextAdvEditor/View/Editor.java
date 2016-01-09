@@ -39,6 +39,7 @@ public class Editor {
 	private ChapterEditor cHeditor;
 	private boolean onSelected;
 	private boolean onConnect;
+	private OptionManager optionManager;
 	
 	@FXML
 	private void select(){
@@ -144,15 +145,12 @@ public class Editor {
 		if(selected!=null){
 			title.setDisable(false);
 			text.setDisable(false);
-			title.setText(selected.getTitle());
-			text.setText(selected.getText());
-			if(selected.getChildSize()>1){
-				String[] children = selected.getChldOText();
-				for(int i = 0; i < children.length; i++){
-					
-				}
+			title.setText(cHeditor.getSelTitle());
+			text.setText(cHeditor.getSelText());
+			if(cHeditor.selHasChildren()){
+				optionManager.setOption(cHeditor.getSelOText());
 			}else{
-				//TODO
+				optionManager.reset();
 			}
 		}else{
 			disable();
@@ -165,6 +163,7 @@ public class Editor {
 		onSelected = false;
 		onConnect = false;
 		cnvsManager.setCanvas(canvas,cHeditor.currentKey());
+		optionManager = new OptionManager(option);
 		
 		canvasPane.heightProperty().addListener(new ChangeListener<Number>(){
 
