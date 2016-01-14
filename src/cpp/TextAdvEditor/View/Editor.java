@@ -17,6 +17,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 
 public class Editor {
 	
@@ -33,7 +34,7 @@ public class Editor {
 	private TextArea text;
 	
 	@FXML
-	private AnchorPane option;
+	private VBox option;
 
 	private CanvasManager cnvsManager;
 	private ChapterEditor cHeditor;
@@ -48,12 +49,14 @@ public class Editor {
 	
 	@FXML
 	private void save(){
-		Text selected = cHeditor.getSelected();
-		selected.setTitle(title.getText());
-		selected.setText(text.getText());
+		cHeditor.setSelTitle(title.getText());
+		cHeditor.setSelText(text.getText());
+		if(cHeditor.selHasChildren()){
+			cHeditor.setSelOText(optionManager.getOText());
+		}
 		if(cHeditor.isCurrent()){
-				cHeditor.updateText();
-			}
+			cHeditor.updateText();
+		}
 	}
 	
 	@FXML
@@ -89,7 +92,7 @@ public class Editor {
 			
 			if(cnvsManager.onNode(e.getX(),e.getY(),true) >= 0){
 				cHeditor.setSelected(cnvsManager.getSelected());
-				updateEditor(cHeditor.getSelected());
+				updateEditor();
 			}else if( press > 1){
 				disable();
 				cHeditor.setSelected(-1);
@@ -109,7 +112,7 @@ public class Editor {
 				cnvsManager.connect(cHeditor.connect(
 					cnvsManager.onNode(e.getX(),e.getY(),false)));
 			}
-			
+			updateEditor();
 			onConnect = false;	
 		}
 	}
@@ -141,15 +144,17 @@ public class Editor {
 		return false;
 	}
 	
-	private void updateEditor(Text selected) {
-		if(selected!=null){
+	private void updateEditor() {
+		if(!cHeditor.isNull()){
 			title.setDisable(false);
 			text.setDisable(false);
 			title.setText(cHeditor.getSelTitle());
 			text.setText(cHeditor.getSelText());
 			if(cHeditor.selHasChildren()){
+				option.setDisable(false);
 				optionManager.setOption(cHeditor.getSelOText());
 			}else{
+				option.setDisable(true);
 				optionManager.reset();
 			}
 		}else{
@@ -163,7 +168,7 @@ public class Editor {
 		onSelected = false;
 		onConnect = false;
 		cnvsManager.setCanvas(canvas,cHeditor.currentKey());
-		optionManager = new OptionManager(option);
+		optionManager = new OptionManager(option, cnvsManager);
 		
 		canvasPane.heightProperty().addListener(new ChangeListener<Number>(){
 
@@ -185,17 +190,17 @@ public class Editor {
 			}
 		});
 		
+		cnvsManager.StartNode(cHeditor.createStart());
+		
 		if(cnvsManager.getSelected() == -1){
 			disable();
 		}
-		
-		cnvsManager.StartNode(cHeditor.createStart());
 	}
 	
 	public void SetSelected(int ID){
 		cHeditor.setSelected(ID);
 		cnvsManager.setSelected(ID);
-		updateEditor(cHeditor.getSelected());
+		updateEditor();
 	}
 	
 	private void disable(){

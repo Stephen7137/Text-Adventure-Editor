@@ -111,5 +111,4 @@ public class SaveProject implements Serializable{
 	public Story getStory(){
 		return story;
 	}
-	
 }

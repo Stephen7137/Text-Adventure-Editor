@@ -1,78 +1,63 @@
 package cpp.TextAdvEditor.View;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
+import cpp.TextAdvEditor.CanvasManager;
 import cpp.TextAdvEditor.Model.NodeText;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 
 public class OptionManager {
 
-	AnchorPane option;
+	VBox option;
 	GridPane grid;
-	FXMLLoader loader;
 	Node[] optionNode;
+	CanvasManager canvas;
 	
-	public OptionManager(AnchorPane option){
+	public OptionManager(VBox option, CanvasManager canvas){
+		this.canvas = canvas;
 		this.option = option;
-		loader = new FXMLLoader();
-		loader.setLocation(OptionManager.class.getResource("OptionText.fxml"));
 	}
 	
-	public void setOption(ArrayList<NodeText> optionText){
-		optionNode = new Node[optionText.size()];
-		for(int i = 0; i > optionText.size(); i++){
-			try {
-				NodeText node = optionText.get(i);
-				optionNode[i] = loader.load();
-				OptionPane pane = loader.getController();
-				pane.set(this, i, node.getID(), node.getText());
-				update();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		option.getChildren().setAll(grid);
-	}
-	
-	private void update(){
+	public void setOption(ArrayList<NodeText> text){
 		reset();
-		grid = new GridPane();
-		for(int i = 0; i > optionNode.length; i++){
-			grid.add(optionNode[i], i, 0);
-		}
-	}
+		option.getChildren().clear();
+		optionNode = new Node[text.size()];
+		for(int i = 0; i < optionNode.length; i++){
+			TextArea textDisplay = new TextArea(text.get(i).getText());
+			textDisplay.setId(Integer.toString(text.get(i).getID()));
+			option.getChildren().add(textDisplay);
+			textDisplay.focusedProperty().addListener(new ChangeListener<Boolean>(){
 
-	public void up(OptionPane optionPane, int index) {
-		Node tmp = optionNode[index];
-		optionNode[index] = optionNode[--index];
-		optionNode[index] = tmp;
-		if(index == 0){
-			optionPane.setTop();
-		}else{
-			optionPane.reset();
+				@Override
+				public void changed(
+						ObservableValue<? extends Boolean> observable,
+						Boolean oldValue, Boolean newValue) {
+					if(newValue){
+						canvas.highlight(Integer.parseInt(textDisplay.getId()));
+					}
+				}
+				
+			});
 		}
-		update();
-	}
-
-	public void down(OptionPane optionPane, int index) {
-		Node tmp = optionNode[index];
-		optionNode[index] = optionNode[++index];
-		optionNode[index] = tmp;
-		if(index == optionNode.length - 1){
-			optionPane.setBottom();
-		}else{
-			optionPane.reset();
-		}
-		update();
 	}
 
 	public void reset() {
 		option.getChildren().clear();
+	}
+
+	public NodeText[] getOText() {
+		ObservableList<Node> textDisplay = option.getChildren();
+		NodeText[] text = new NodeText[textDisplay.size()];
+		for(int i = 0; i < text.length; i++){
+			TextArea area = (TextArea) textDisplay.get(i);
+			text[i] = new NodeText(area.getText(), Integer.parseInt(area.getId()));
+		}
+		return text;
 	}
 }

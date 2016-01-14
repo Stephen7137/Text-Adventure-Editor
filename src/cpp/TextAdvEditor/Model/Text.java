@@ -74,7 +74,7 @@ public class Text implements Serializable{
 	}
 	
 	public int getChildSize(){
-		return child.length;
+		return child==null? 0:child.length;
 	}
 	
 	public int getParentSize(){
@@ -82,12 +82,17 @@ public class Text implements Serializable{
 	}
 	
 	public void addChild(Text text){
-		Text[] newChild = new Text[child.length+1];
-		for(int i = 0; i < child.length; i++){
-			newChild[i] = child[i];
+		if(child != null){
+			Text[] newChild = new Text[child.length+1];
+			for(int i = 0; i < child.length; i++){
+				newChild[i] = child[i];
+			}
+			newChild[newChild.length-1] = text;
+			child = newChild;
+		}else{
+			child = new Text[1];
+			child[0] = text;
 		}
-		newChild[newChild.length-1] = text;
-		child = newChild;
 	}
 	
 	public void addParent(Text parent){
@@ -95,29 +100,36 @@ public class Text implements Serializable{
 	}
 
 	public Text popChild(int i) {
-		return child.remove(i);
+		Text text = child[i];
+		removeChild(text);
+		return text;
 	}
 	
 	public boolean isChild(Text text){
-		for(int i = 0; i < child.length; i++){
-			if(child[i] == text) return true;
+		if(child != null){
+			for(int i = 0; i < child.length; i++){
+				if(child[i] == text) return true;
+			}
 		}
 		return false;
 	}
 
-	public void removeChild(Text child) {
-		this.child.remove(child);
+	public void removeChild(Text text) {
+		Text[] newChild = new Text[child.length-1];
+		int j = 0;
+		for(int i = 0; i < child.length; i++){
+			if(child[i] == text) i++;
+			newChild[j++] = child[i];
+		}
+		child = newChild;
 	}
 
 	public void removeParent(Text parent) {
 		this.parent.remove(parent);
 	}
-
-	public void updateChild(NodeText[] oNode) {
-		Text[] newChild = Text[child.size()];
-		for(NodeText text: oNode){
-			
-		}
-		child = newChild;
+	
+	public boolean hasChildren(){
+		if(child == null) return false;
+		return child.length > 1;
 	}
 }

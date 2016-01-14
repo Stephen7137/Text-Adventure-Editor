@@ -9,6 +9,7 @@ import java.io.ObjectOutputStream;
 import cpp.TextAdvEditor.Model.Story;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javax.Json.Json;
 
 /**
  * Saves and loads {@link ProjectManager#editor} from a file {@link #file}.
@@ -76,6 +77,7 @@ public class ProjectManager {
 	}
 	
 	public void export(){
+		JsonObject jsonStory;
 		fileChooser.getExtensionFilters().clear();
 		fileChooser.getExtensionFilters().add(
 				new FileChooser.ExtensionFilter("Story file", "*.story"));

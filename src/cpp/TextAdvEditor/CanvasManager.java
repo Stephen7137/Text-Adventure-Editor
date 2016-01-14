@@ -53,10 +53,30 @@ public class CanvasManager {
 		resetSelected();
 	}
 	
+	public void updateWithHighlight(TreePoint tree){
+		drawBackground();
+		drawAllLines();
+		gc.setStroke(Color.AQUA);
+		gc.strokeLine(selected.getX(),selected.getY(), tree.getX(), tree.getY());
+		drawAllNodes();
+		drawSelectHighlight();
+		drawAllTools();
+	}
+	
 	public void update(){
+		drawBackground();
+		drawAllLines();
+		drawAllNodes();
+		drawSelectHighlight();
+		drawAllTools();
+	}
+	
+	private void drawBackground(){
 		gc.setFill(background);
 		gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-		draw();
+	}
+	
+	private void drawAllTools(){
 		gc.setFill(background);
 		gc.setStroke(Color.BLACK);
 		gc.setLineWidth(3);
@@ -65,15 +85,7 @@ public class CanvasManager {
 		drawNode(toolText.getX(), toolText.getY(), Color.BLUE);
 	}
 	
-//	private boolean checkArea(double x, double y){
-//		for(int i = 0; i < lookup.size(); i++){
-//			if(lookup.get(i).distance(x, y) <= diameter + distance) return false;
-//		}
-//		return true;
-//	}
-	
-	private void draw(){
-		
+	private void drawAllLines(){
 		for(int i = 0; i < lookup.size(); i++){
 			drawChild(lookup.get(i), Color.BLACK);
 		}
@@ -81,6 +93,9 @@ public class CanvasManager {
 		if(selected != null){
 			drawChild(selected, Color.YELLOW);
 		}
+	}
+	
+	private void drawAllNodes(){
 		
 		for(int i = 0; i < lookup.size(); i++){
 			drawNode(lookup.get(i), Color.BLUE);
@@ -90,6 +105,10 @@ public class CanvasManager {
 			drawNode(start,Color.GREEN);
 		}
 		
+		
+	}
+	
+	private void drawSelectHighlight(){
 		if(selected != null){
 			gc.setStroke(Color.ORANGE);
 			gc.setLineWidth(5);
@@ -242,9 +261,6 @@ public class CanvasManager {
 			gc.setStroke(Color.GREEN);	
 		}
 		gc.strokeLine(selected.getX(), selected.getY(), x, y);
-		//double lineW = gc.getLineWidth()/4;
-		//gc.strokeOval(x - lineW, y - lineW, lineW, lineW);
-		//gc.strokeOval(selected.getX() - lineW, selected.getY() - lineW, lineW, lineW);
 	}
 
 	public void connect(int ID) {
@@ -292,7 +308,7 @@ public class CanvasManager {
 	}
 
 	public void StartNode(int ID) {
-		createNode(radious, canvas.getHeight()/2, ID);
+		createNode(diameter, canvas.getHeight()/2, ID);
 		start = searchTree(ID);
 	}
 	
@@ -304,5 +320,9 @@ public class CanvasManager {
 	public void setStart(int ID){
 		start = searchTree(ID);
 		update();
+	}
+
+	public void highlight(int ID) {
+		updateWithHighlight(searchTree(ID));
 	}
 }

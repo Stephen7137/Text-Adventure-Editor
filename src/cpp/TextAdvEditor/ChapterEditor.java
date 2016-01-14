@@ -45,6 +45,11 @@ public class ChapterEditor{
 	public void updateText(){
 		if(currentNode != null){
 			story.setValue(currentNode.getText());
+			if(currentNode.hasChildren()){
+				Text[] oText = currentNode.getChild();
+				for(int i = 0; i < oText.length; i++ )
+				story.setValue(story.get() + "\n" + (i+1) + ") " + oText[i].getOptText());
+			}
 		}
 	}
 	
@@ -54,15 +59,15 @@ public class ChapterEditor{
 	
 	public void delete(){
 		
-		ArrayList<Text> child = selectedNode.getChild();
-		for(int i = 0; i < child.size(); i++){
-			child.get(i).removeParent(selectedNode);
-			if(child.get(i).getParentSize() == 0){
-				noParent.add(child.get(i));
+		Text[] child = selectedNode.getChild();
+		for(int i = 0; i < child.length; i++){
+			child[i].removeParent(selectedNode);
+			if(child[i].getParentSize() == 0){
+				noParent.add(child[i]);
 			}
 		}
 		
-		ArrayList<Text> parent = selectedNode.getChild();
+		ArrayList<Text> parent = selectedNode.getParent();
 		for(int i = 0; i < parent.size(); i++){
 			parent.get(i).removeChild(selectedNode);
 			if(parent.get(i).getChildSize() == 0){
@@ -285,6 +290,7 @@ public class ChapterEditor{
 	
 	public int createStart(){
 		start = searchTree(createText());
+		currentNode = start;
 		return start.getKey();
 	}
 	
@@ -359,7 +365,7 @@ public class ChapterEditor{
 	}
 
 	public boolean selHasChildren() {
-		return selectedNode.getChildSize()>1;
+		return selectedNode.hasChildren();
 	}
 
 	public ArrayList<NodeText> getSelOText() {
@@ -371,6 +377,13 @@ public class ChapterEditor{
 	}
 	
 	public void setSelOText( NodeText[] oNode) {
-		selectedNode.updateChild(oNode);
+		Text[] newChild = new Text[oNode.length];
+		
+		for(int i = 0; i < newChild.length; i++){
+			newChild[i] = searchTree(oNode[i].getID());
+			newChild[i].setOptText(oNode[i].getText());
+		}
+		
+		selectedNode.setChild(newChild);
 	}
 }
