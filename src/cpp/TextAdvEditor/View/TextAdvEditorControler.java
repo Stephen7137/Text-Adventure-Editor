@@ -14,15 +14,19 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
+/**
+ * Controls the main window TAedior will be working out of
+ * including menu bar and tab window.
+ * 
+ * @author Stephen Jackson
+ *
+ */
 public class TextAdvEditorControler {
 		
-	/**
-	 * The object that holds the chapter and is used to
-	 * save and load the chapter.
-	 */
 	private ProjectManager manager;
 	private ChapterEditor cHeditor;
 	Editor editor;
+	
 	private Stage owner;	
 	
 	@FXML
@@ -55,6 +59,10 @@ public class TextAdvEditorControler {
 		editor.setStart();
 	}
 	
+	/**
+	 * Creates a window for the user to search through a 
+	 * array of NodeText contains all bookmark.
+	 */
 	@FXML
 	private void bookmark(){
 		DisplaySearch search = new DisplaySearch();
@@ -62,6 +70,10 @@ public class TextAdvEditorControler {
 				cHeditor.getSelectedKey()));
 	}
 	
+	/**
+	 * Creates a window for the user to search through a 
+	 * array of NodeText contains all nodes with no child.
+	 */
 	@FXML
 	private void noChild(){
 		DisplaySearch search = new DisplaySearch();
@@ -69,6 +81,10 @@ public class TextAdvEditorControler {
 				cHeditor.getSelectedKey()));
 	}
 	
+	/**
+	 * Creates a window for the user to search through a 
+	 * array of NodeText contains all nodes with no Parent.
+	 */
 	@FXML
 	private void noParent(){
 		DisplaySearch search = new DisplaySearch();
@@ -76,6 +92,10 @@ public class TextAdvEditorControler {
 				cHeditor.getSelectedKey()));
 	}
 	
+	/**
+	 * Creates a window for the user to search through a 
+	 * array of NodeText contains all nodes.
+	 */
 	@FXML
 	private void tree(){
 		DisplaySearch search = new DisplaySearch();
@@ -98,6 +118,11 @@ public class TextAdvEditorControler {
 		manager.load();
 	}
 	
+	/**
+	 * Checks to make sure Story has a valid starting node
+	 * and then exports Story else gives a warning. User can
+	 * choose to continue exporting with errors.
+	 */
 	@FXML
 	private void export(){
 		if(cHeditor.validate()){
@@ -109,6 +134,11 @@ public class TextAdvEditorControler {
 		}
 	}
 	
+	/**
+	 * Validates add bookmark or removes bookmark menu item
+	 * to allow book mark work if the selected node is not 
+	 * null and toggles if it is in the bookmark list or not.
+	 */
 	@FXML
 	private void update(){
 		if(cHeditor.isNull()){
@@ -126,6 +156,11 @@ public class TextAdvEditorControler {
 		
 	}
 	
+	/**
+	 * Creates a Alert box and gets the user input of the user.
+	 * notifies if a Node has no parents.
+	 * @return the users input.
+	 */
 	private boolean noParents(){
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Node with no Parent");
@@ -143,12 +178,23 @@ public class TextAdvEditorControler {
 		if(results.get() == buttonYes) return true;
 		return false;
 	}
-			
+	
+	/**
+	 * Sets the ProjectManager and current Stage to allow menu to
+	 * save the Story.
+	 * @param manager
+	 * @param owner
+	 */
 	public void setWriteChapter(ProjectManager manager, Stage owner){
 		this.owner = owner;
 		this.manager = manager;	
 	}
 	
+	/**
+	 * Adds Tab to the stage for multiple to interact with the story
+	 * @param string title of the tab
+	 * @param load pane to be add to the tab
+	 */
 	public void addTab(String string, AnchorPane load) {
 		Tab tab = new Tab();
 		tab.setText(string);
@@ -160,6 +206,12 @@ public class TextAdvEditorControler {
 		editor.SetSelected(key);
 	}
 
+	/**
+	 * Gets the controller of the tabs and allows for interaction
+	 * of the Panels.
+	 * @param editor
+	 * @param cHeditor
+	 */
 	public void setData(Editor editor, ChapterEditor cHeditor) {
 		this.editor = editor;
 		this.cHeditor = cHeditor;

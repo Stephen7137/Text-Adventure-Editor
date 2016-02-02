@@ -5,10 +5,17 @@ import java.util.Random;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import cpp.TextAdvEditor.Model.*;
 
+/**
+ * ChapterEditor manages all of the nodes and how they
+ * interact with each other. Nodes text are able to be
+ * changed and be add as child or parent to other node.
+ * nodes are also able to be created or deleted.
+ * 
+ * @author Stephen Jackson
+ *
+ */
 public class ChapterEditor{
 	
 	private int chapterID;
@@ -24,6 +31,11 @@ public class ChapterEditor{
 	private StringProperty story;
 	private Text start;
 	
+	/**
+	 * Sets up the default variable and updates the text.
+	 * @param chapterID
+	 * @param tree
+	 */
 	public ChapterEditor(int chapterID, ArrayList<Text> tree){
 		this.chapterID = chapterID;
 		memory = new Stack(20);
@@ -41,14 +53,19 @@ public class ChapterEditor{
 	public int connect(int id){
 		return addChild(searchTree(id));
 	}
-		
+	
+	/**
+	 * updateText updates story to contain the currentNode text
+	 * and the options it contains.
+	 */
 	public void updateText(){
 		if(currentNode != null){
 			story.setValue(currentNode.getText());
 			if(currentNode.hasChildren()){
 				Text[] oText = currentNode.getChild();
 				for(int i = 0; i < oText.length; i++ )
-				story.setValue(story.get() + "\n" + (i+1) + ") " + oText[i].getOptText());
+				story.setValue(story.get() + "\n" + (i+1) + ") " + 
+				oText[i].getOptText());
 			}
 		}
 	}
@@ -57,6 +74,11 @@ public class ChapterEditor{
 		return story;
 	}
 	
+	/**
+	 * delete removes selected node from the tree and removes the node from the
+	 * parent list from child nodes and removes itself from child list in 
+	 * parent nodes.
+	 */
 	public void delete(){
 		
 		Text[] child = selectedNode.getChild();
@@ -80,9 +102,16 @@ public class ChapterEditor{
 		
 		tree.remove(selectedNode);
 		selectedNode = null;
-		System.out.println(tree.size());
 	}
 	
+	/**
+	 * disconnect disconnects selected from node with provided key.
+	 * checks to make sure if the node is in selected child list and
+	 * then deletes it. If selectedNode has no children then it is
+	 * add to arrayList noChild.
+	 * @param key
+	 * @return returns the key of the disconnected node.
+	 */
 	public int disconnect(int key){
 		Text node = searchTree(key);
 		selectedNode.removeChild(node);
@@ -103,7 +132,13 @@ public class ChapterEditor{
 	public void removeBookmark(){
 		bookmark.remove(selectedNode);
 	}
-		
+	
+	/**
+	 * next continues down the tree with the given input and then
+	 * update Text. Only update if input is a valid entry.
+	 * @param input
+	 * @return true if input was valid
+	 */
 	public boolean next(int input){
 		if(input >= currentNode.getChildSize())return false;
 		
@@ -114,6 +149,9 @@ public class ChapterEditor{
 		return true;
 	}
 	
+	/*
+	 * back reverts the call next up to a predetermined limit.
+	 */
 	public boolean back(){
 		
 		Text back = memory.pop();
@@ -124,8 +162,72 @@ public class ChapterEditor{
 		
 		return true;
 	}
+	
+	
+	/**
+	 * stack holds value Text to be recalled latter.
+	 * 
+	 * @author Stephen Jackson
+	 *
+	 */
+	class Stack{
+		
+		Text[] stack;
+		int size;
+		int max;
+		int pointer;
+		
+		public Stack(int max){
+			stack = new Text[max];
+			this.max = max;
+			size = 0;
+			pointer = 0;
+		}
+		
+		/**
+		 * push adds text to stack and updates size.
+		 * disallows size to be lager than stack size,
+		 * but allows text to over write values.
+		 * @param text
+		 */
+		public void push(Text text){
+			pointer = (pointer + 1)%stack.length;
+			stack[pointer] = text;
+			if(size < max){
+				size++;
+			}else{
+				size = max;
+			}
+		}
+		
+		/**
+		 * removes top of the stack and sets to null.
+		 * size is reduced to 0 and only moves if size
+		 * is greater than 0.
+		 * @return
+		 */
+		public Text pop(){
+			Text pop = stack[pointer];
+			stack[pointer] = null;
+			if(pointer == 0){
+				pointer = max - 1;
+			}else{
+				pointer--;
+			}
+			if(size > 0){
+				size--;
+			}else{
+				size = 0;
+			}
+			return pop;
+		}
+	}
 
-
+	/**
+	 * createText creates a new node and then adds it to
+	 * arrayList tree, noParents, and noChild
+	 * @return key of the new node.
+	 */
 	public int createText() {
 		Text newText = new Text(createKey());
 		noParent.add(newText);
@@ -144,6 +246,12 @@ public class ChapterEditor{
 		return currentNode.getKey();
 	}
 	
+	/**
+	 * addChild takes text and adds it to the child
+	 * list of selectedNode.
+	 * @param text
+	 * @return key of the text
+	 */
 	public int addChild(Text text){
 		if(text != null){
 			
@@ -162,6 +270,11 @@ public class ChapterEditor{
 		return -1;
 	}
 	
+	/**
+	 * searchTree searches the tree for nodes that have the ID key.
+	 * @param key
+	 * @return text with id key
+	 */
 	private Text searchTree(int key){
 		if(key >= 0){
 			for(int i = 0; i < tree.size(); i++){
@@ -187,6 +300,12 @@ public class ChapterEditor{
 		return createList(tree);
 	}
 	
+	/**
+	 * createsList collects all titles and id in arrayList and
+	 * and returns a arrayList
+	 * @param list
+	 * @return arrayList of NodeText
+	 */
 	private ArrayList<NodeText> createList(ArrayList<Text> list){
 		ArrayList<NodeText> textList = new ArrayList<NodeText>();
 		for(Text text : list){
@@ -225,6 +344,14 @@ public class ChapterEditor{
 		return currentNode.getChildSize()>1;
 	}
 
+	/**
+	 * load sets all values to the new values provided.
+	 * @param chapterID
+	 * @param currentNode
+	 * @param noParent
+	 * @param noChild
+	 * @param bookmark
+	 */
 	public void load(int chapterID, Text currentNode,
 			ArrayList<Text> noParent, ArrayList<Text> noChild,
 			ArrayList<Text> bookmark) {
@@ -261,11 +388,21 @@ public class ChapterEditor{
 		this.tree = tree;
 	}
 
+	/**
+	 * isChild checks node with id key is in selectedNodes
+	 * list of child.
+	 * @param key
+	 * @return true if text with key is child.
+	 */
 	public boolean isChild(int key) {
 		Text text = searchTree(key);
 		return selectedNode.isChild(text);
 	}
 	
+	/**
+	 * isEmpty checks selectedNode if it contains any text.
+	 * @return
+	 */
 	public boolean isEmpty() {
 		if(!selectedNode.getTitle().equals("")) return false;
 		if(!selectedNode.getText().equals("")) return false;
@@ -288,6 +425,11 @@ public class ChapterEditor{
 		return -1;
 	}
 	
+	/**
+	 * createStart creates a new Text and sets it
+	 * as the starting node for the chapter.
+	 * @return key of the starting node
+	 */
 	public int createStart(){
 		start = searchTree(createText());
 		currentNode = start;
@@ -301,48 +443,12 @@ public class ChapterEditor{
 	public Text getStart() {
 		return start;
 	}
-	
-	class Stack{
-		
-		Text[] stack;
-		int size;
-		int max;
-		int pointer;
-		
-		public Stack(int max){
-			stack = new Text[max];
-			this.max = max;
-			size = 0;
-			pointer = 0;
-		}
-		
-		public void push(Text text){
-			pointer = (pointer + 1)%stack.length;
-			stack[pointer] = text;
-			if(size < max){
-				size++;
-			}else{
-				size = max;
-			}
-		}
-		
-		public Text pop(){
-			Text pop = stack[pointer];
-			stack[pointer] = null;
-			if(pointer == 0){
-				pointer = max - 1;
-			}else{
-				pointer--;
-			}
-			if(size > 0){
-				size--;
-			}else{
-				size = 0;
-			}
-			return pop;
-		}
-	}
 
+	/**
+	 * validate checks to see if the last text in noParent
+	 * is start of if noParent is empty that start is not null.
+	 * @return
+	 */
 	public boolean validate() {
 		return ((noParent.size()==1 && noParent.contains(start)) 
 				|| (noParent.size()==0 && start!=null));
@@ -368,6 +474,12 @@ public class ChapterEditor{
 		return selectedNode.hasChildren();
 	}
 
+	/**
+	 * getSelOText collects all the option Text from
+	 * selectedNode and then creates a arrayList of
+	 * TextNodes that have oText and Id.
+	 * @return arrayList of TextNodes
+	 */
 	public ArrayList<NodeText> getSelOText() {
 		ArrayList<NodeText> list = new ArrayList<NodeText>();
 		for(Text text : selectedNode.getChild()){
@@ -376,6 +488,11 @@ public class ChapterEditor{
 		return list;
 	}
 	
+	/**
+	 * setSelOText sets the oText of all child of the
+	 * selectedNode.
+	 * @param oNode
+	 */
 	public void setSelOText( NodeText[] oNode) {
 		Text[] newChild = new Text[oNode.length];
 		

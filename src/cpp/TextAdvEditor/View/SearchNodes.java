@@ -8,9 +8,16 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
+/**
+ * Creates a window with a combo box to allow user to select
+ * a node from the list of titles.
+ * 
+ * @author Stephen Jackson
+ *
+ */
 public class SearchNodes {
 	
-	 DisplaySearch displaySearch;
+	DisplaySearch displaySearch;
 	
 	@FXML
 	private TextField input;
@@ -25,12 +32,23 @@ public class SearchNodes {
 		displaySearch.close();
 	}
 	
+	/**
+	 *  Sets the value that the combo box is set to
+	 */
 	@FXML
 	private void setNode(){
 		displaySearch.set(selected.getValue());
 	}
 	
-	public void setSearch(ObservableList<String>  list, DisplaySearch displaySearch){
+	/**
+	 * Allows the list to be edited by changing a search parameter in
+	 * the text field input.
+	 * 
+	 * @param list of Node titles
+	 * @param displaySearch
+	 */
+	public void setSearch(ObservableList<String>  list, 
+			DisplaySearch displaySearch){
 		this.displaySearch = displaySearch;
 		this.list = list;
 		input.textProperty().addListener(new ChangeListener<String>(){
@@ -45,6 +63,11 @@ public class SearchNodes {
 		updateList();
 	}
 	
+	/**
+	 * updates the combo box based on the input. When the input is
+	 * empty the list will turn to the default list. Show the list if
+	 * the input is not empty else hide the combo box.
+	 */
 	private void updateList(){
 		
 		ObservableList<String> buffer = FXCollections.observableArrayList();
@@ -57,7 +80,8 @@ public class SearchNodes {
 		}else{
 			for(String item : list){
 			
-				if(item.toLowerCase().contains(input.getText().toLowerCase())){
+				if(item.toLowerCase().contains(input.getText()
+						.toLowerCase())){
 					buffer.add(item);
 				}			
 			}

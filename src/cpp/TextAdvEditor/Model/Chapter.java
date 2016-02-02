@@ -3,6 +3,13 @@ package cpp.TextAdvEditor.Model;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * Chapter holds all of the text nodes and the
+ * starting node.
+ * 
+ * @author Stephen Jackson
+ *
+ */
 public class Chapter implements Serializable{
 
 	/**

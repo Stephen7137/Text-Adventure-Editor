@@ -1,5 +1,13 @@
 package cpp.TextAdvEditor.Model;
 
+/**
+ * Carry for text and text id to be used
+ * else wear and returned. Used for changing
+ * text in the nodes.
+ * 
+ * @author Stephen Jackson
+ *
+ */
 public class NodeText {
 	
 	private String text;

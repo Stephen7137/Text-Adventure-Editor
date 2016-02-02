@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import cpp.TextAdvEditor.CanvasManager;
 import cpp.TextAdvEditor.ChapterEditor;
-import cpp.TextAdvEditor.Model.Text;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -19,6 +18,14 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
+/**
+ * Controls the canvas input and the input for the
+ * node's text. Uses mouse input and button press to
+ * update the canvas and the text editor.
+ * 
+ * @author Stephen
+ *
+ */
 public class Editor {
 	
 	@FXML
@@ -42,11 +49,12 @@ public class Editor {
 	private boolean onConnect;
 	private OptionManager optionManager;
 	
-	@FXML
-	private void select(){
-		
-	}
-	
+	/**
+	 * Takes all the text from the text editor and
+	 * applies the new text to the selected node.
+	 * updates the text if the Selected node is
+	 * current.
+	 */
 	@FXML
 	private void save(){
 		cHeditor.setSelTitle(title.getText());
@@ -59,6 +67,10 @@ public class Editor {
 		}
 	}
 	
+	/**
+	 * Deletes the node if the node is empty else throw error
+	 * box. User input will allow to continue to delete the node.
+	 */
 	@FXML
 	private void delete(){
 		boolean delete = true;
@@ -73,6 +85,12 @@ public class Editor {
 		}
 	}
 	
+	/**
+	 * When the mouse is pressed the mouse location is verified on 
+	 * what the mouse is over. If over a node set node to selected,
+	 * if over tools create new node, else set selected nod to null.
+	 * @param e
+	 */
 	@FXML
 	private void onPress(MouseEvent e){
 		if(e.getButton() == MouseButton.PRIMARY){
@@ -80,7 +98,8 @@ public class Editor {
 			
 			switch(cnvsManager.tools(e.getX(),e.getY())){
 			case 0:
-				cnvsManager.createNode(e.getX(),e.getY(), cHeditor.createText());
+				cnvsManager.createNode(e.getX(),e.getY(), 
+						cHeditor.createText());
 				break;
 			}
 			if(cnvsManager.onSelected(e.getX(),e.getY())){
@@ -101,6 +120,13 @@ public class Editor {
 		}
 	}
 	
+	/**
+	 * When mouse release check if connecting nodes connect
+	 * selected to the node that cursor is over. If already
+	 * connected, disconnect the nodes.
+	 * reset booleans to default value.
+	 * @param e
+	 */
 	@FXML
 	private void onRelease(MouseEvent e){
 		onSelected = false;
@@ -117,6 +143,11 @@ public class Editor {
 		}
 	}
 	
+	/**
+	 * Follows mouse cursor and allows for node to be drawn at current location
+	 * else draws a line to cursors location.
+	 * @param e
+	 */
 	@FXML
 	private void follow(MouseEvent e){
 		if(onSelected){
@@ -128,11 +159,17 @@ public class Editor {
 		}
 	}
 	
+	/**
+	 * Create a alert box if user is trying to delete a node that has
+	 * text in it.
+	 * @return user input.
+	 */
 	private boolean deteleError(){
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Delete Node");
 		alert.setHeaderText(null);
-		alert.setContentText("Node contains Text!\nAre you sure you want to delte node?");
+		alert.setContentText("Node contains Text!\nAre you sure "
+				+ "you want to delte node?");
 		
 		ButtonType buttonYes = new ButtonType("Yes");
 		ButtonType buttonNo = new ButtonType("No");
@@ -144,6 +181,10 @@ public class Editor {
 		return false;
 	}
 	
+	/**
+	 * updates the text editor with the text from the selected node.
+	 * Enable text areas if there is a selected node.
+	 */
 	private void updateEditor() {
 		if(!cHeditor.isNull()){
 			title.setDisable(false);
@@ -162,7 +203,14 @@ public class Editor {
 		}
 	}
 
-	public void setCanvasManger(CanvasManager canvasManager, ChapterEditor cHeditor) {
+	/**
+	 * Sets default values and adds listener to the canvas to be resized.
+	 * Disables text if select is null and create a starting node.
+	 * @param canvasManager
+	 * @param cHeditor
+	 */
+	public void setCanvasManger(CanvasManager canvasManager,
+			ChapterEditor cHeditor) {
 		this.cHeditor = cHeditor;
 		cnvsManager = canvasManager;
 		onSelected = false;
@@ -173,8 +221,8 @@ public class Editor {
 		canvasPane.heightProperty().addListener(new ChangeListener<Number>(){
 
 			@Override
-			public void changed(ObservableValue<? extends Number> observableValue,
-					Number oldHeight, Number newHeight) {
+			public void changed(ObservableValue<? extends Number> 
+					observableValue, Number oldHeight, Number newHeight) {
 				canvas.heightProperty().set((double) newHeight );
 				cnvsManager.update();
 			}
@@ -183,8 +231,8 @@ public class Editor {
 		canvasPane.widthProperty().addListener(new ChangeListener<Number>(){
 	
 			@Override
-			public void changed(ObservableValue<? extends Number> observableValue,
-					Number oldWidth, Number newWidth) {
+			public void changed(ObservableValue<? extends Number> 
+					observableValue, Number oldWidth, Number newWidth) {
 				canvas.widthProperty().set((double) newWidth );
 				cnvsManager.update();
 			}

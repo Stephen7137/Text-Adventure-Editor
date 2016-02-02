@@ -3,6 +3,14 @@ package cpp.TextAdvEditor.Model;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * Holds all chapters and the 
+ * title of the story as well as
+ * point to the starting chapter;
+ * 
+ * @author Stephen Jackson
+ *
+ */
 public class Story implements Serializable{
 	/**
 	 * 
@@ -39,6 +47,12 @@ public class Story implements Serializable{
 		
 	}
 	
+	/**
+	 * Searches through chapter array in search
+	 * for chapter with id.
+	 * @param chapterID
+	 * @return chapter with id chapterID.
+	 */
 	private Chapter search(int chapterID){
 		for(int i = 0; i < chapter.size(); i++){
 			if(chapter.get(i).getID() == chapterID) return chapter.get(i);

@@ -8,6 +8,14 @@ import cpp.TextAdvEditor.Model.Story;
 import cpp.TextAdvEditor.Model.Text;
 import cpp.TextAdvEditor.Model.TreePoint;
 
+/**
+ * SaveProject is used for saving the current
+ * state that the canvas, story tree, and editor.
+ * Saves info to a file .project and selected 
+ * location.
+ * @author Stephen Jackson
+ *
+ */
 public class SaveProject implements Serializable{
 	
 	protected static final long serialVersionUID = 232323;
@@ -29,6 +37,13 @@ public class SaveProject implements Serializable{
 		editor.add(new SaveEditor(chEditor));
 	}
 	
+	/**
+	 * SaveCanvas holds the canvas points and chapter Id to
+	 * be saved to a file with out any non important data.
+	 * 
+	 * @author Stephen Jackson
+	 *
+	 */
 	class SaveCanvas implements Serializable{
 		/**
 		 * 
@@ -51,6 +66,13 @@ public class SaveProject implements Serializable{
 		}
 	}
 	
+	/**
+	 * SaveEditor collects all the important information
+	 * from editor to be saved to file.
+	 * 
+	 * @author Stephen Jackson
+	 *
+	 */
 	class SaveEditor implements Serializable{
 		/**
 		 * 
@@ -70,6 +92,11 @@ public class SaveProject implements Serializable{
 			chEditor.load(chapterID, currentNode, noParent, noChild, bookmark);
 		}
 
+		/**
+		 * update refreshes the variables so they are up to date
+		 * when saving to a file.
+		 * @param chEditor the node editor.
+		 */
 		public void update(ChapterEditor chEditor) {
 			bookmark = chEditor.saveBookmark();
 			noChild = chEditor.saveNoChild();
@@ -79,6 +106,12 @@ public class SaveProject implements Serializable{
 		}
 	}
 
+	/**
+	 * update refreshes the SaveEditor and SaveCanvas contents so that the
+	 * newest information is saved to file.
+	 * @param cnvsManager is the canvas editor.
+	 * @param chEditor is the node editor.
+	 */
 	public void update(CanvasManager cnvsManager, ChapterEditor chEditor) {
 		currentChapterID = chEditor.getCHID();
 		story.getCH(currentChapterID).setStart(chEditor.getStart());
@@ -86,6 +119,11 @@ public class SaveProject implements Serializable{
 		searchEditor(chEditor.getCHID()).update(chEditor);	
 	}
 	
+	/**
+	 * searches array of SaveEditors with chapter id ID.
+	 * @param ID chapterID
+	 * @return SaveEditor with ChapterID ID.
+	 */
 	public SaveEditor searchEditor(int ID){
 		for(int i = 0; i < editor.size();i++){
 			if(editor.get(i).chapterID == ID) return editor.get(i);
@@ -93,6 +131,11 @@ public class SaveProject implements Serializable{
 		return null;
 	}
 	
+	/**
+	 * searches array of SaveCanvas with chapter id ID.
+	 * @param ID chapterID
+	 * @return SaveCanvas with ChapterID ID.
+	 */
 	public SaveCanvas searchCanvas(int ID){
 		for(int i = 0; i < canvas.size();i++){
 			if(canvas.get(i).chapterID == ID) return canvas.get(i);
@@ -100,7 +143,14 @@ public class SaveProject implements Serializable{
 		return null;
 	}
 
-	public void loadProject(CanvasManager cnvsManager, ChapterEditor chEditor) {
+	/**
+	 * loadProject restores the CanvasManager and ChapterEditor from
+	 * a previous save.
+	 * @param cnvsManager
+	 * @param chEditor
+	 */
+	public void loadProject(CanvasManager cnvsManager, 
+			ChapterEditor chEditor) {
 		Chapter chapter = story.getCH(currentChapterID);
 		chEditor.loadTree(chapter.getTree(), chapter.getStart());
 		searchEditor(currentChapterID).loadEditor(chEditor);

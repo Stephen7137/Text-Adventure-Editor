@@ -1,4 +1,12 @@
 package cpp.TextAdvEditor.Model;
+
+/**
+ * Contains the next Chapter when the node
+ * reaches the end of the tree.
+ * 
+ * @author Stephen Jackson
+ *
+ */
 public class End extends Text {
 
 	/**

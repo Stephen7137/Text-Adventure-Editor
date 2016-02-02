@@ -11,11 +11,24 @@ import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+/**
+ * Creates the window for searching through a list of nodes
+ * 
+ * @author Stephen Jackson
+ *
+ */
 public class DisplaySearch {
 
 	String input;
 	Stage stage;
 	
+	/**
+	 * Creates a window and sets the default list of NodeText.
+	 * @param list
+	 * @param owner
+	 * @param currentID
+	 * @return id of the selected node.
+	 */
 	public int getSearch(ArrayList<NodeText> list, Stage owner, int currentID){
 		
 		stage = new Stage();
@@ -43,6 +56,12 @@ public class DisplaySearch {
 		return getID(list, currentID);
 	}
 	
+	/**
+	 * Get the current id from the selected title.
+	 * @param list
+	 * @param currentID
+	 * @return id of title
+	 */
 	private int getID(ArrayList<NodeText> list, int currentID){
 		if(input==null){
 			return currentID;
@@ -55,6 +74,11 @@ public class DisplaySearch {
 		return -1;
 	}
 	
+	/**
+	 * converts the list of NodeText into a observableArrayList.
+	 * @param list
+	 * @return
+	 */
 	private ObservableList<String> createList(ArrayList<NodeText> list){
 		
 		ObservableList<String> buffer =	FXCollections.observableArrayList();

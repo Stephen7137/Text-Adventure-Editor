@@ -2,7 +2,13 @@ package cpp.TextAdvEditor.Model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-
+/**
+ * A simple pointer that keeps track of the location and the
+ * points that it is connected to. 
+ * 
+ * @author Stephen Jackson
+ *
+ */
 public class TreePoint implements Serializable{
 	/**
 	 * 

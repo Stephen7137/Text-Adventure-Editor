@@ -2,6 +2,14 @@ package cpp.TextAdvEditor.Model;
 
 import java.io.Serializable;
 
+/**
+ * A simple class to keep track of points
+ * and have some calculation with other points.
+ * Can be saved  to a file.
+ * 
+ * @author Stephen Jackson
+ *
+ */
 public class SimpPoint2D implements Serializable {
 
 	/**
@@ -30,6 +38,13 @@ public class SimpPoint2D implements Serializable {
 		this.y = y;
 	}
 	
+	/**
+	 * Finds the distance between itself and the
+	 * provided points.
+	 * @param x2
+	 * @param y2
+	 * @return returns the distance.
+	 */
 	public double distance(double x2, double y2) {
 		x2 -= x;
 		y2 -= y;

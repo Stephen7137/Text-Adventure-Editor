@@ -32,15 +32,11 @@ public class ProjectManager {
 	}
 
 	/**
-	 * Checks to see if {@link #file} is null, if not then calls {@link #saveChapter()}
-	 * If file is not null then {@link #editor} has been saved before or has been
-	 * loaded from a file.
+	 * Checks to see if {@link #file} is null, if not then calls 
+	 * {@link #saveChapter()} If file is not null then {@link #editor} has 
+	 * been saved before or has been loaded from a file.
 	 */
 	public void save(){
-		//if(editor.chapter.getFileName().equals("")){
-		//	GetChapterName();
-		//	fileChooser.setInitialFileName(editor.chapter.getFileName());
-		//}
 		if(file == null){
 			saveAs();
 		}else{
@@ -49,8 +45,8 @@ public class ProjectManager {
 	}
 
 	/**
-	 * Ask the user for location of where to save the project and saves the location
-	 * to {@link #file} for later uses.
+	 * Ask the user for location of where to save the project and saves the 
+	 * location to {@link #file} for later uses.
 	 */
 	public void saveAs(){
 		file = fileChooser.showSaveDialog(primaryStage);
@@ -71,11 +67,13 @@ public class ProjectManager {
 			oos.writeObject(save);
 			oos.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
+	/**
+	 * Export saveProject to a json to be used in external program.
+	 */
 	public void export(){
 		JsonObject jsonStory;
 		fileChooser.getExtensionFilters().clear();
@@ -97,6 +95,10 @@ public class ProjectManager {
 		setFileType();
 	}
 	
+	/**
+	 * load Opens a specified file and loads save info into
+	 * CanvasManager and ChapterEditor.
+	 */
 	public void load(){
 		file = fileChooser.showOpenDialog(new Stage());
 		if(file != null){
@@ -113,24 +115,18 @@ public class ProjectManager {
 		}
 	}
 	
-	/**
-	 * Creates a new empty project. If the project is not empty then
-	 * call {@link #eraseData()} checks to see if the old project will
-	 * overwrite with a new project.
-	 * @return true if a new project was created.
-	 */
-	public boolean newProject(){
-		//if(!editor.isEmpty()){
-		//	if(eraseData()) return false;
-		//}
-		//editor = new ChapterEditor("");
-		return true;
-	}
-	
 	public ChapterEditor getChapter(){
 		return editor;
 	}
 
+	/**
+	 * setStory is Fist time setup so that the fileChooser is correct
+	 * and all the story, ChapterEditor, and CanvasManager are properly
+	 * formated to be saved to a file. 
+	 * @param story
+	 * @param cnvsManager
+	 * @param editor
+	 */
 	public void setStory(Story story, CanvasManager cnvsManager,
 			ChapterEditor editor) {
 		this.editor = editor;
@@ -139,9 +135,13 @@ public class ProjectManager {
 		save.addManagers(cnvsManager, editor);
 		fileChooser = new FileChooser();
 		setFileType();
-		fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+		fileChooser.setInitialDirectory(new File(System.
+				getProperty("user.home")));
 	}
 	
+	/**
+	 * setFileType sets fileChooser to be .project
+	 */
 	private void setFileType(){
 		fileChooser.getExtensionFilters().clear();
 		fileChooser.getExtensionFilters().add(
